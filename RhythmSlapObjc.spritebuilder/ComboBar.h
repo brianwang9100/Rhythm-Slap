@@ -11,4 +11,5 @@
 @interface ComboBar : CCNode
 @property (assign, nonatomic) int totalSize;
 @property (assign, nonatomic) int currentSize;
+@property (strong, nonatomic) CCNodeColor *comboSize;
 @end

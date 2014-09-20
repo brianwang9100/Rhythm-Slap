@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Apportable. All rights reserved.
 //
 
-#import "CCNode.h"
+#import "CCScene.h"
 #import "Hand.h"
 #import "Face.h"
 #import "ComboBar.h"
@@ -18,6 +18,6 @@
 #import "TripleSlap.h"
 #import "SlapDown.h"
 
-@interface MainScene : CCNode
+@interface MainScene : CCScene
 
 @end

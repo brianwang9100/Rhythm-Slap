@@ -9,5 +9,5 @@
 #import "CCNode.h"
 
 @interface Face : CCNode
-
+@property (strong, nonatomic) CCSprite *faceSprite;
 @end

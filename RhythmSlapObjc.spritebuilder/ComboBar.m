@@ -18,6 +18,6 @@
 
 -(void) update:(CCTime)delta
 {
-    
+    self.comboSize.contentSize = CGSizeMake((float)(self.currentSize/self.totalSize), self.comboSize.contentSize.height);
 }
 @end

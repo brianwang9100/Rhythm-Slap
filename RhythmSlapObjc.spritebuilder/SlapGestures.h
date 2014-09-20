@@ -10,7 +10,7 @@
 
 @interface SlapGestures : CCNode
 @property (assign, nonatomic) int numOfBeats;
-@property (weak, nonatomic) NSMutableArray *slapSequence;
-@property (weak, nonatomic) NSMutableArray *slapSequenceTimeStamp;
+@property (strong, nonatomic) NSMutableArray *slapSequence;
+@property (strong, nonatomic) NSMutableArray *slapSequenceTimeStamp;
 
 @end

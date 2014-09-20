@@ -7,51 +7,52 @@
 //
 
 #import "MainScene.h"
+#define ARC4RANDOM_MAX 0x100000000
 
 @implementation MainScene
+{
+    Hand *_hand;
+    Face *_face;
+    Timer *_timer;
+    ComboBar *_comboBar;
+    CCNodeGradient *_colorGradientNode;
+    CCNodeColor *_glowNode;
+    CCLabelTTF *_gestureMessage;
 
-Hand *_hand;
-Face *_face;
-Timer *_timer;
-ComboBar *_comboBar;
-CCNodeGradient *_colorGradientNode;
-CCNodeColor *_glowNode;
-CCLabelTTF *_gestureMessage;
+    int _currentNumOfSlaps;
+    int _waveNumOfSlaps;
 
-int _currentNumOfSlaps;
-int _waveNumOfSlaps;
+    BOOL _gameCountdownMode;
+    int _gameCountdown;
 
-BOOL _gameCountdownMode;
-int _gameCountdown;
+    BOOL _gameStarted;
+    BOOL _gameEnded;
+    BOOL _tutorialMode;
+    BOOL _comboMode;
 
-BOOL _gameStarted;
-BOOL _gameEnded;
-BOOL _tutorialMode;
-BOOL _comboMode;
+    NSArray *_fourSlap;
+    NSArray *_threeSlapOneDouble;
+    NSArray *_twoDoubleTwoSlap;
+    NSArray *_twoSlapOneDown;
 
-NSArray *_fourSlap;
-NSArray *_threeSlapOneDouble;
-NSArray *_twoDoubleTwoSlap;
-NSArray *_twoSlapOneDown;
+    NSMutableArray *_queue;
 
-NSMutableArray *_queue;
+    int _comboBarSize;
 
-int _comboBarSize;
+    NSArray *_currentGestureSet;
+    int _currentGestureSetIndex;
+    int _totalPoints;
 
-NSArray *_currentGestureSet;
-int _currentGestureSetIndex;
-int _totalPoints;
-
-UISwipeGestureRecognizer *_swipeLeft;
-UISwipeGestureRecognizer *_swipeRight;
-UISwipeGestureRecognizer *_swipeUp;
-UISwipeGestureRecognizer *_swipeDown;
+    UISwipeGestureRecognizer *_swipeLeft;
+    UISwipeGestureRecognizer *_swipeRight;
+    UISwipeGestureRecognizer *_swipeUp;
+    UISwipeGestureRecognizer *_swipeDown;
+}
 
 -(void) didLoadFromCCB
 {
     self.userInteractionEnabled = FALSE;
     _gestureMessage.string = @"";
-    
     
     _currentNumOfSlaps = 0;
     _waveNumOfSlaps = 12;
