@@ -10,14 +10,10 @@
 
 @implementation Timer
 
--(void) didLoadFromCCB
+-(id) init
 {
     self.currentTime = 0.0;
-}
-
--(void) update:(CCTime)delta
-{
-    self.currentTime += delta;
+    return self;
 }
 
 @end

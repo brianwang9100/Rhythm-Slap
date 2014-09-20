@@ -10,8 +10,4 @@
 
 @implementation SingleSlap
 
--(void) didLoadFromCCB
-{
-    
-}
 @end

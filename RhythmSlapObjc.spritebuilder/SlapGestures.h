@@ -9,8 +9,6 @@
 #import "CCNode.h"
 
 @interface SlapGestures : CCNode
-@property (assign, nonatomic) int numOfBeats;
-@property (strong, nonatomic) NSMutableArray *slapSequence;
-@property (strong, nonatomic) NSMutableArray *slapSequenceTimeStamp;
+@property (strong, nonatomic) NSString *typeOfSlapNeeded;
 
 @end

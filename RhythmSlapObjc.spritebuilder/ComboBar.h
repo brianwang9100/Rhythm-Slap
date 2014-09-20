@@ -9,7 +9,7 @@
 #import "CCNode.h"
 
 @interface ComboBar : CCNode
-@property (assign, nonatomic) int totalSize;
-@property (assign, nonatomic) int currentSize;
+@property (assign, nonatomic) float totalSize;
+@property (assign, nonatomic) float currentSize;
 @property (strong, nonatomic) CCNodeColor *comboSize;
 @end

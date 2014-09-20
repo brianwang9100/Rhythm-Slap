@@ -19,8 +19,8 @@
     CCNodeColor *_glowNode;
     CCLabelTTF *_gestureMessage;
 
-    int _currentNumOfSlaps;
-    int _waveNumOfSlaps;
+    int _currentNumOfBeats;
+    int _waveNumOfBeats;
 
     BOOL _gameCountdownMode;
     int _gameCountdown;
@@ -41,12 +41,18 @@
 
     NSArray *_currentGestureSet;
     int _currentGestureSetIndex;
+    SlapGestures *_currentGesture;
     int _totalPoints;
 
     UISwipeGestureRecognizer *_swipeLeft;
     UISwipeGestureRecognizer *_swipeRight;
     UISwipeGestureRecognizer *_swipeUp;
     UISwipeGestureRecognizer *_swipeDown;
+    
+    float _gestureTimeStamp;
+    BOOL _gestureRecognized;
+    BOOL _allowGesture;
+    float _beatLength;
 }
 
 -(void) didLoadFromCCB
@@ -54,11 +60,10 @@
     self.userInteractionEnabled = FALSE;
     _gestureMessage.string = @"";
     
-    _currentNumOfSlaps = 0;
-    _waveNumOfSlaps = 12;
+    _timer = [Timer alloc];
     
     _gameCountdownMode = TRUE;
-    _gameCountdown = 5;
+    _gameCountdown = 4;
     _gameStarted = FALSE;
     _gameEnded = FALSE;
     _comboMode = FALSE;
@@ -66,13 +71,15 @@
     _currentGestureSet = nil;
     _currentGestureSetIndex = 0;
     _totalPoints = 0;
-    
-    
 
-    _fourSlap = [NSArray arrayWithObjects: [SingleSlap init],[SingleSlap init], [SingleSlap init], [SingleSlap init], nil];
-    _threeSlapOneDouble = [NSArray arrayWithObjects: [SingleSlap init],[SingleSlap init], [SingleSlap init], [DoubleSlap init], nil];
-    _twoDoubleTwoSlap = [NSArray arrayWithObjects: [DoubleSlap init],[DoubleSlap init], [SingleSlap init], [SingleSlap init], nil];
-    _twoSlapOneDown = [NSArray arrayWithObjects: [SingleSlap init],[SingleSlap init], [SlapDown init], nil];
+    _gestureTimeStamp = 0;
+    _gestureRecognized = FALSE;
+    _beatLength = .5;
+    
+    _fourSlap = [NSArray arrayWithObjects: [SingleSlap alloc],[SingleSlap alloc], [SingleSlap alloc], [SingleSlap alloc], nil];
+    _threeSlapOneDouble = [NSArray arrayWithObjects: [SingleSlap alloc],[SingleSlap alloc], [SingleSlap alloc], [DoubleSlap alloc], nil];
+    _twoDoubleTwoSlap = [NSArray arrayWithObjects: [DoubleSlap alloc],[DoubleSlap alloc], [SingleSlap alloc], [SingleSlap alloc], nil];
+    _twoSlapOneDown = [NSArray arrayWithObjects: [SingleSlap alloc],[SingleSlap alloc], [SlapDown alloc], nil];
     
     _queue = [NSMutableArray arrayWithObjects: _fourSlap, _threeSlapOneDouble, _fourSlap, _twoSlapOneDown,  nil];
     
@@ -96,34 +103,192 @@
 
 -(void) update:(CCTime)delta
 {
+    _timer.currentTime += delta;
+    _gestureTimeStamp += delta;
+    _comboBar.comboSize.contentSize = CGSizeMake(_comboBar.currentSize/_comboBar.totalSize, _comboBar.comboSize.contentSize.height);
+    
     if (!_gameStarted)
     {
         if (_gameCountdownMode)
         {
-            if (_timer.currentTime >= 1)
+            if (_timer.currentTime >= 2*_beatLength)
             {
                 if (_gameCountdown == 0)
                 {
                     _gestureMessage.string = @"START!";
-                    [self startGame];
+                    [self performSelector:@selector(startGame) withObject:nil afterDelay:_beatLength];
                 }
-                else if (_gameCountdown < 4)
+                else if (_gameCountdown < 4 && _gameCountdown > 0)
                 {
                     _gestureMessage.string = [NSString stringWithFormat:@"%i", _gameCountdown];
                 }
                 _timer.currentTime = 0;
+                _gameCountdown--;
             }
         }
     }
     else if (!_gameEnded)
     {
+        if (_currentNumOfBeats >= _waveNumOfBeats)
+        {
+            _beatLength -= .1;
+            _gestureMessage.string = @"WAVE COMPLETE!";
+            _gameStarted = FALSE;
+            _gameCountdownMode = TRUE;
+            _gameCountdown = 5;
+            _timer.currentTime = 0;
+        }
+        
         if (_currentGestureSet == _fourSlap)
         {
+            _currentGesture = _fourSlap[_currentGestureSetIndex];
+            if ([_currentGesture isKindOfClass:[SingleSlap class]])
+            {
+                _currentGesture.typeOfSlapNeeded = @"SingleSlap";
+            }
+            if (!_gestureRecognized && _timer.currentTime >= 1* _beatLength)
+            {
+                _gestureMessage.string = @"SLAP!";
+                //insert beat
+            }
+            if (!_gestureRecognized && _timer.currentTime >= 1.5*_beatLength)
+            {
+                _allowGesture = TRUE;
+            }
+            
+            if (!_gestureRecognized && _gestureTimeStamp >= 2.2* _beatLength)
+            {
+                _gestureTimeStamp = .2*_beatLength;
+                _timer.currentTime = .2*_beatLength;
+                _currentGestureSetIndex++;
+                _gestureRecognized = FALSE;
+                _gestureMessage.string = @"TOO LATE!";
+                [self setPercentage:-3];
+                _allowGesture = FALSE;
+                _currentNumOfBeats +=2;
+
+            }
+            else if (_gestureRecognized && _timer.currentTime >= 2*_beatLength)
+            {
+                _gestureTimeStamp = 0;
+                _timer.currentTime = 0;
+                _currentGestureSetIndex++;
+                _gestureRecognized = FALSE;
+                _allowGesture = FALSE;
+                _currentNumOfBeats +=2;
+            }
+            
+            if (_currentGestureSetIndex >= [_fourSlap count])
+            {
+                [self loadNewGesture];
+            }
             
         }
-        else if ( _currentGestureSet == _threeSlapOneDouble)
+        else if (_currentGestureSet == _threeSlapOneDouble)
         {
+            _currentGesture = _threeSlapOneDouble[_currentGestureSetIndex];
+            if ([_currentGesture isKindOfClass:[SingleSlap class]])
+            {
+                _currentGesture.typeOfSlapNeeded = @"SingleSlap";
+                
+                if (!_gestureRecognized && _timer.currentTime >= 1*_beatLength)
+                {
+                    _gestureMessage.string = @"SLAP!";
+                }
+                if (!_gestureRecognized && _timer.currentTime >= 1.5*_beatLength)
+                {
+                    _allowGesture = TRUE;
+                }
+                
+                if (!_gestureRecognized && _gestureTimeStamp >= 2.2* _beatLength)
+                {
+                    _gestureTimeStamp = .2*_beatLength;
+                    _timer.currentTime = .2*_beatLength;
+                    _currentGestureSetIndex++;
+                    _gestureRecognized = FALSE;
+                    _gestureMessage.string = @"TOO LATE!";
+                    [self setPercentage:-3];
+                    _allowGesture = FALSE;
+                    _currentNumOfBeats +=2;
+                    
+                }
+                else if (_gestureRecognized && _timer.currentTime >= 2*_beatLength)
+                {
+                    _gestureTimeStamp = 0;
+                    _timer.currentTime = 0;
+                    _currentGestureSetIndex++;
+                    _gestureRecognized = FALSE;
+                    _allowGesture = FALSE;
+                    _currentNumOfBeats +=2;
+                }
+            }
+        
+            if ([_currentGesture isKindOfClass:[DoubleSlap class]])
+            {
+                
+                if (!_gestureRecognized && _timer.currentTime >= .95*_beatLength )
+                {
+                    _gestureMessage.string = @"DOUBLE SLAP!";
+                }
+                if (!_gestureRecognized && _timer.currentTime >= 1)
+                {
+                    //insert beat
+                }
+                if (!_gestureRecognized && _timer.currentTime >= 1.25*_beatLength)
+                {
+                    _allowGesture = TRUE;
+                    _currentGesture.typeOfSlapNeeded = @"Left";
+                }
+                if (!_gestureRecognized && _gestureTimeStamp >= 1.7*_beatLength)
+                {
+                    _allowGesture = FALSE;
+                    _gestureMessage.string = @"LATE!";
+                    [self setPercentage: -1];
+                }
+                if (!_gestureRecognized && _timer.currentTime >= 1.75*_beatLength)
+                {
+                    _allowGesture = TRUE;
+                    _gestureRecognized = FALSE;
+                    _currentGesture.typeOfSlapNeeded = @"Right";
+                }
+                
+                if (!_gestureRecognized && _gestureTimeStamp >= 2.2* _beatLength)
+                {
+                    _gestureTimeStamp = .2*_beatLength;
+                    _timer.currentTime = .2*_beatLength;
+                    _currentGestureSetIndex++;
+                    _gestureRecognized = FALSE;
+                    if ([_gestureMessage.string isEqual:@"LATE!"])
+                    {
+                        _gestureMessage.string = @"DOUBLE LATE!";
+                    }
+                    else
+                    {
+                        _gestureMessage.string = @"TOO LATE!";
+                    }
+                    
+                    [self setPercentage: -1];
+                    _allowGesture = FALSE;
+                    _currentNumOfBeats +=2;
+                    
+                }
+                else if (_gestureRecognized && _timer.currentTime >= 2*_beatLength)
+                {
+                    _gestureTimeStamp = 0;
+                    _timer.currentTime = 0;
+                    _currentGestureSetIndex++;
+                    _gestureRecognized = FALSE;
+                    _allowGesture = FALSE;
+                    _currentNumOfBeats +=2;
+                }
+
+            }
             
+            if (_currentGestureSetIndex >= [_threeSlapOneDouble count])
+            {
+                [self loadNewGesture];
+            }
+
         }
         else if (_currentGestureSet == _twoDoubleTwoSlap)
         {
@@ -151,13 +316,161 @@
     }
 }
 
+-(void) swipeLeft
+{
+    if (!_gestureRecognized && _allowGesture)
+    {
+        if ([_currentGesture.typeOfSlapNeeded  isEqual: @"SingleSlap"] && [_currentGesture isKindOfClass:[SingleSlap class]])
+        {
+            if (_gestureTimeStamp <2.05*_beatLength && _gestureTimeStamp > 1.95*_beatLength)
+            {
+                _gestureMessage.string = @"PERFECT!";
+                [self setPercentage: 6];
+                
+            }
+            else if (_gestureTimeStamp < 2.10*_beatLength && _gestureTimeStamp > 1.9 *_beatLength)
+            {
+                _gestureMessage.string = @"GOOD";
+                [self setPercentage: 4];
+            }
+            else if (_gestureTimeStamp < 2.2 *_beatLength && _gestureTimeStamp > 1.8 *_beatLength)
+            {
+                _gestureMessage.string = @"OK";
+                [self setPercentage: 2];
+            }
+            else if (_gestureTimeStamp < 1.8*_beatLength)
+            {
+                _gestureMessage.string = @"TOO EARLY!";
+                [self setPercentage: -10];
+            }
+        }
+        else if ([_currentGesture.typeOfSlapNeeded isEqual: @"Left"] && [_currentGesture isKindOfClass:[DoubleSlap class]])
+        {
+            if (_gestureTimeStamp <1.55*_beatLength && _gestureTimeStamp > 1.45*_beatLength)
+            {
+                _gestureMessage.string = @"PERFECT!";
+                [self setPercentage: 3];
+                
+            }
+            else if (_gestureTimeStamp < 1.6*_beatLength && _gestureTimeStamp > 1.4 *_beatLength)
+            {
+                _gestureMessage.string = @"GOOD";
+                [self setPercentage: 2];
+            }
+            else if (_gestureTimeStamp < 1.7 *_beatLength && _gestureTimeStamp > 1.3 *_beatLength)
+            {
+                _gestureMessage.string = @"OK";
+                [self setPercentage: 1];
+            }
+            else if (_gestureTimeStamp < 1.3*_beatLength)
+            {
+                _gestureMessage.string = @"TOO EARLY!";
+                [self setPercentage: -5];
+            }
+        }
+        else
+        {
+            _gestureMessage.string = @"WRONG SLAP";
+            [self setPercentage: -5];
+        }
+            
+        _gestureRecognized = TRUE;
+        _allowGesture = FALSE;
+    }
+}
+
+-(void) swipeRight
+{
+    if (!_gestureRecognized && _allowGesture)
+    {
+        if ([_currentGesture.typeOfSlapNeeded  isEqual: @"SingleSlap"] && [_currentGesture isKindOfClass:[SingleSlap class]])
+        {
+            if (_gestureTimeStamp <2.05*_beatLength && _gestureTimeStamp > 1.95*_beatLength)
+            {
+                _gestureMessage.string = @"PERFECT!";
+                [self setPercentage: 6];
+                
+            }
+            else if (_gestureTimeStamp < 2.10*_beatLength && _gestureTimeStamp > 1.9 *_beatLength)
+            {
+                _gestureMessage.string = @"GOOD";
+                [self setPercentage: 4];
+            }
+            else if (_gestureTimeStamp < 2.2 *_beatLength && _gestureTimeStamp > 1.8 *_beatLength)
+            {
+                _gestureMessage.string = @"OK";
+                [self setPercentage: 2];
+            }
+            else if (_gestureTimeStamp < 1.8*_beatLength)
+            {
+                _gestureMessage.string = @"TOO EARLY!";
+                [self setPercentage: -10];
+            }
+        }
+        
+        else if ([_currentGesture.typeOfSlapNeeded isEqual: @"Right"] && [_currentGesture isKindOfClass:[DoubleSlap class]])
+        {
+            if (_gestureTimeStamp <2.05*_beatLength && _gestureTimeStamp > 1.95*_beatLength)
+            {
+                if ([_gestureMessage.string isEqual: @"PERFECT!"])
+                {
+                    _gestureMessage.string = @"DOUBLE PERFECT!";
+                }
+                else
+                {
+                   _gestureMessage.string = @"PERFECT!";
+                }
+                
+                [self setPercentage: 3];
+                
+            }
+            else if (_gestureTimeStamp < 2.1*_beatLength && _gestureTimeStamp > 1.9 *_beatLength)
+            {
+                _gestureMessage.string = @"GOOD";
+                [self setPercentage: 2];
+            }
+            else if (_gestureTimeStamp < 2.2 *_beatLength && _gestureTimeStamp > 1.8 *_beatLength)
+            {
+                _gestureMessage.string = @"OK";
+                [self setPercentage: 1];
+            }
+            else if (_gestureTimeStamp < 1.8*_beatLength)
+            {
+                _gestureMessage.string = @"TOO EARLY!";
+                [self setPercentage: -5];
+            }
+        }
+        else
+        {
+            _gestureMessage.string = @"WRONG SLAP";
+            [self setPercentage: -5];
+        }
+        
+        _gestureRecognized = TRUE;
+        _allowGesture = FALSE;
+    }
+}
+
+-(void) swipeUp
+{
+    
+}
+
+-(void) swipeDown
+{
+    
+}
+
 -(void) startGame
 {
     _gameCountdownMode = FALSE;
     _gameStarted = TRUE;
-    self.userInteractionEnabled = TRUE;
+    _allowGesture = FALSE;
     _currentGestureSet = [_queue objectAtIndex:0];
     _timer.currentTime = 0;
+    _gestureTimeStamp = 0;
+    _currentNumOfBeats = 0;
+    _waveNumOfBeats = 32;
 }
 
 -(void) loadNewGesture
@@ -176,6 +489,8 @@
             break;
     }
     [_queue addObject: generatedGesture];
+    _currentGestureSetIndex = 0;
+    _currentGestureSet = [_queue objectAtIndex:0];
 }
 
 
