@@ -602,8 +602,6 @@
 						<string>ComboBar.ccb</string>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -1168,15 +1166,15 @@
 				<integer>12</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>-1</integer>
+			<integer>0</integer>
 			<key>length</key>
-			<real>10</real>
+			<real>6</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.0</real>
+			<real>4.9328126907348633</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>6</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
