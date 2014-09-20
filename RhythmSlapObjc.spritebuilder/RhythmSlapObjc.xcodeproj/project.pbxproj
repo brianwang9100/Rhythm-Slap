@@ -36,6 +36,17 @@
 		B77F1B3E17B978D7009739AE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B77F1B3D17B978D7009739AE /* Foundation.framework */; };
 		B77F1B4017B978D7009739AE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B77F1B3F17B978D7009739AE /* CoreGraphics.framework */; };
 		B77F1B4217B978D7009739AE /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B77F1B4117B978D7009739AE /* CoreText.framework */; };
+		DFF41F3B19CD999B000D90C8 /* StartScene.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F3A19CD999B000D90C8 /* StartScene.m */; };
+		DFF41F3E19CD99AB000D90C8 /* ComboBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F3D19CD99AB000D90C8 /* ComboBar.m */; };
+		DFF41F4119CD99B3000D90C8 /* Face.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F4019CD99B3000D90C8 /* Face.m */; };
+		DFF41F4419CD99BE000D90C8 /* Timer.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F4319CD99BE000D90C8 /* Timer.m */; };
+		DFF41F4719CD99C6000D90C8 /* Hand.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F4619CD99C6000D90C8 /* Hand.m */; };
+		DFF41F4A19CD99CE000D90C8 /* GameEndPopUp.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F4919CD99CE000D90C8 /* GameEndPopUp.m */; };
+		DFF41F4E19CD9B36000D90C8 /* SlapGestures.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F4D19CD9B36000D90C8 /* SlapGestures.m */; };
+		DFF41F5119CD9B46000D90C8 /* SingleSlap.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F5019CD9B46000D90C8 /* SingleSlap.m */; };
+		DFF41F5419CD9B4D000D90C8 /* DoubleSlap.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F5319CD9B4D000D90C8 /* DoubleSlap.m */; };
+		DFF41F5719CD9B55000D90C8 /* TripleSlap.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F5619CD9B55000D90C8 /* TripleSlap.m */; };
+		DFF41F5A19CD9B5E000D90C8 /* SlapDown.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F5919CD9B5E000D90C8 /* SlapDown.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,6 +101,28 @@
 		B77F1B3F17B978D7009739AE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		B77F1B4117B978D7009739AE /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		B7B3713D180358F1007369CC /* libObjectiveChipmunk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libObjectiveChipmunk.a; path = "../libs/cocos2d-iphone/external/Chipmunk/xcode/build/Debug-iphoneos/libObjectiveChipmunk.a"; sourceTree = "<group>"; };
+		DFF41F3919CD999B000D90C8 /* StartScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartScene.h; sourceTree = "<group>"; };
+		DFF41F3A19CD999B000D90C8 /* StartScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartScene.m; sourceTree = "<group>"; };
+		DFF41F3C19CD99AB000D90C8 /* ComboBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComboBar.h; sourceTree = "<group>"; };
+		DFF41F3D19CD99AB000D90C8 /* ComboBar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ComboBar.m; sourceTree = "<group>"; };
+		DFF41F3F19CD99B3000D90C8 /* Face.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Face.h; sourceTree = "<group>"; };
+		DFF41F4019CD99B3000D90C8 /* Face.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Face.m; sourceTree = "<group>"; };
+		DFF41F4219CD99BE000D90C8 /* Timer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Timer.h; sourceTree = "<group>"; };
+		DFF41F4319CD99BE000D90C8 /* Timer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Timer.m; sourceTree = "<group>"; };
+		DFF41F4519CD99C6000D90C8 /* Hand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Hand.h; sourceTree = "<group>"; };
+		DFF41F4619CD99C6000D90C8 /* Hand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hand.m; sourceTree = "<group>"; };
+		DFF41F4819CD99CE000D90C8 /* GameEndPopUp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameEndPopUp.h; sourceTree = "<group>"; };
+		DFF41F4919CD99CE000D90C8 /* GameEndPopUp.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameEndPopUp.m; sourceTree = "<group>"; };
+		DFF41F4C19CD9B36000D90C8 /* SlapGestures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlapGestures.h; sourceTree = "<group>"; };
+		DFF41F4D19CD9B36000D90C8 /* SlapGestures.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlapGestures.m; sourceTree = "<group>"; };
+		DFF41F4F19CD9B46000D90C8 /* SingleSlap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleSlap.h; sourceTree = "<group>"; };
+		DFF41F5019CD9B46000D90C8 /* SingleSlap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleSlap.m; sourceTree = "<group>"; };
+		DFF41F5219CD9B4D000D90C8 /* DoubleSlap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleSlap.h; sourceTree = "<group>"; };
+		DFF41F5319CD9B4D000D90C8 /* DoubleSlap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoubleSlap.m; sourceTree = "<group>"; };
+		DFF41F5519CD9B55000D90C8 /* TripleSlap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TripleSlap.h; sourceTree = "<group>"; };
+		DFF41F5619CD9B55000D90C8 /* TripleSlap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TripleSlap.m; sourceTree = "<group>"; };
+		DFF41F5819CD9B5E000D90C8 /* SlapDown.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlapDown.h; sourceTree = "<group>"; };
+		DFF41F5919CD9B5E000D90C8 /* SlapDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SlapDown.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +162,19 @@
 				B737893E1807617C0076A88C /* AppDelegate.m */,
 				B7378992180767190076A88C /* MainScene.h */,
 				B7378993180767190076A88C /* MainScene.m */,
+				DFF41F3919CD999B000D90C8 /* StartScene.h */,
+				DFF41F3A19CD999B000D90C8 /* StartScene.m */,
+				DFF41F3C19CD99AB000D90C8 /* ComboBar.h */,
+				DFF41F3D19CD99AB000D90C8 /* ComboBar.m */,
+				DFF41F3F19CD99B3000D90C8 /* Face.h */,
+				DFF41F4019CD99B3000D90C8 /* Face.m */,
+				DFF41F4519CD99C6000D90C8 /* Hand.h */,
+				DFF41F4619CD99C6000D90C8 /* Hand.m */,
+				DFF41F4819CD99CE000D90C8 /* GameEndPopUp.h */,
+				DFF41F4919CD99CE000D90C8 /* GameEndPopUp.m */,
+				DFF41F4219CD99BE000D90C8 /* Timer.h */,
+				DFF41F4319CD99BE000D90C8 /* Timer.m */,
+				DFF41F4B19CD9B26000D90C8 /* Slaps */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -217,6 +263,23 @@
 				B73789861807631A0076A88C /* Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		DFF41F4B19CD9B26000D90C8 /* Slaps */ = {
+			isa = PBXGroup;
+			children = (
+				DFF41F4C19CD9B36000D90C8 /* SlapGestures.h */,
+				DFF41F4D19CD9B36000D90C8 /* SlapGestures.m */,
+				DFF41F4F19CD9B46000D90C8 /* SingleSlap.h */,
+				DFF41F5019CD9B46000D90C8 /* SingleSlap.m */,
+				DFF41F5219CD9B4D000D90C8 /* DoubleSlap.h */,
+				DFF41F5319CD9B4D000D90C8 /* DoubleSlap.m */,
+				DFF41F5519CD9B55000D90C8 /* TripleSlap.h */,
+				DFF41F5619CD9B55000D90C8 /* TripleSlap.m */,
+				DFF41F5819CD9B5E000D90C8 /* SlapDown.h */,
+				DFF41F5919CD9B5E000D90C8 /* SlapDown.m */,
+			);
+			name = Slaps;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -342,7 +405,18 @@
 			files = (
 				B737893F1807617C0076A88C /* AppDelegate.m in Sources */,
 				B7378994180767190076A88C /* MainScene.m in Sources */,
+				DFF41F5719CD9B55000D90C8 /* TripleSlap.m in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
+				DFF41F3E19CD99AB000D90C8 /* ComboBar.m in Sources */,
+				DFF41F4A19CD99CE000D90C8 /* GameEndPopUp.m in Sources */,
+				DFF41F4E19CD9B36000D90C8 /* SlapGestures.m in Sources */,
+				DFF41F4719CD99C6000D90C8 /* Hand.m in Sources */,
+				DFF41F4119CD99B3000D90C8 /* Face.m in Sources */,
+				DFF41F5119CD9B46000D90C8 /* SingleSlap.m in Sources */,
+				DFF41F3B19CD999B000D90C8 /* StartScene.m in Sources */,
+				DFF41F5419CD9B4D000D90C8 /* DoubleSlap.m in Sources */,
+				DFF41F4419CD99BE000D90C8 /* Timer.m in Sources */,
+				DFF41F5A19CD9B5E000D90C8 /* SlapDown.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,7 +446,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -391,7 +465,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -402,9 +476,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Brian Wang (WFG337ZWR6)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -418,7 +493,8 @@
 					"\"Source/libs/cocos2d-iphone/external/ObjectAL\"/**",
 				);
 				INFOPLIST_FILE = Source/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"-lz",
@@ -426,7 +502,8 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = RhythmSlapObjc;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "47b2396a-84ed-4c03-a99b-47a0611af95b";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -436,9 +513,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Brian Wang (WFG337ZWR6)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/Prefix.pch;
@@ -451,14 +529,15 @@
 					"\"Source/libs/cocos2d-iphone/external/ObjectAL\"/**",
 				);
 				INFOPLIST_FILE = Source/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"-lz",
 					"-lsqlite3",
 					"-ObjC",
 				);
 				PRODUCT_NAME = RhythmSlapObjc;
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "47b2396a-84ed-4c03-a99b-47a0611af95b";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
