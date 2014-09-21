@@ -16,5 +16,4 @@
 -(void) hitUp;
 -(void) hitDown;
 -(void) reset;
-
 @end

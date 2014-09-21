@@ -171,7 +171,8 @@
                                                 [[SlapGestures alloc] initWithTime: 1 andType: @"SLAP!"],
                                                 [[SlapGestures alloc] initWithTime: 1 andType: @"SingleSlap"],
                                                 [[SlapGestures alloc] initWithTime: 1 andType: @"HEAD BASH!"],
-                                                [[SlapGestures alloc] initWithTime: 3 andType: @"DownSlap"], nil];
+                                                [[SlapGestures alloc] initWithTime: 2 andType: @"DownSlap"],
+                                                [[SlapGestures alloc] initWithTime: 1 andType: @"PAUSE"] ,nil];
 
     
     _queue = [NSMutableArray arrayWithObjects: _fourSlap, _threeSlapOneDouble, _twoDoubleOneTriple, _twoSlapOneDown,  nil];
@@ -470,7 +471,7 @@
                             [_face hitLeft];
                             [_leftAudioPlayer play];
                             _gestureMessage.string = @"Swipe Left!";
-                            _tutorialLabel.string = @"Be as accurate \nas possible!";
+                            
                             
                         }
                         if (_currentGestureSetIndex == 2 || _currentGestureSetIndex == 5)
@@ -512,7 +513,7 @@
         {
             _currentGesture = _twoSlapOneDown[_currentGestureSetIndex];
             
-            if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
+            if ((([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]) || [_currentGesture.typeOfSlapNeeded isEqual: @"PAUSE"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
                 [_medBeatAudioPlayer prepareToPlay];
@@ -543,7 +544,7 @@
                 {
                     _gestureTimeStamp = 0;
                     _timer.currentTime = 0;
-                    _currentGestureSetIndex++;
+                    
                     
                     _gestureRecognized = FALSE;
                     _allowGesture = TRUE;
@@ -565,12 +566,12 @@
                             _tutorialLabel.string = @"Wait for it...\nTHEN SLAP";
                         }
                     }
+                    _currentGestureSetIndex++;
                 }
-                
-                if (_currentGestureSetIndex >= [_twoSlapOneDown count])
-                {
-                    [self loadNewGesture];
-                }
+            }
+            if (_currentGestureSetIndex >= [_twoSlapOneDown count])
+            {
+                [self loadNewGesture];
             }
         }
     }
@@ -601,7 +602,6 @@
         [_face hitLeft];
         [_leftAudioPlayer prepareToPlay];
         [_leftAudioPlayer play];
-        [self loadParticleExplosionWithParticleName:@"Spit" onObject:_face withDirection:@"Left"];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"LeftSlap"])
         {
@@ -647,7 +647,6 @@
         [_face hitRight];
         [_rightAudioPlayer prepareToPlay];
         [_rightAudioPlayer play];
-        [self loadParticleExplosionWithParticleName:@"Spit" onObject:_face withDirection:@"Right"];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"RightSlap"])
         {
@@ -694,7 +693,6 @@
         [_face hitUp];
         [_upAudioPlayer prepareToPlay];
         [_upAudioPlayer play];
-        [self loadParticleExplosionWithParticleName:@"Stars" onObject:_face];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"UpSlap"])
         {
@@ -742,7 +740,6 @@
         [_face hitDown];
         [_downAudioPlayer prepareToPlay];
         [_downAudioPlayer play];
-        [self loadParticleExplosionWithParticleName:@"Stars" onObject:_face];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"DownSlap"])
         {
@@ -858,7 +855,7 @@
     _timer.currentTime = 0;
     _gestureTimeStamp = 0;
     _currentNumOfBeats = 0;
-    _waveNumOfBeats = 32;
+    _waveNumOfBeats = 36;
 }
 
 -(void) endGame
@@ -900,16 +897,6 @@
     _currentGestureSetIndex = 0;
     _currentGestureSet = [_queue objectAtIndex:0];
 }
-
--(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object withDirection: (NSString*) direction{
-    @synchronized(self)
-    {
-        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle%@", particleName, direction]];
-        explosion.autoRemoveOnFinish = TRUE;
-        explosion.position = object.position;
-        [_face addChild: explosion];
-    }
-}
 -(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object
 {
     @synchronized(self)
@@ -926,5 +913,9 @@
     _totalScore += score * _pointMultiplier *_currentGesture.timeStamp;
     _totalScoreLabel.string = [NSString stringWithFormat:@"%i", _totalScore];
 }
-
+-(void) resetDefaults
+{
+    NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+}
 @end
