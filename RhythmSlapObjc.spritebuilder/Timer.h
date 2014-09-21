@@ -10,5 +10,6 @@
 
 @interface Timer : CCNode
 @property (assign, nonatomic) float currentTime;
+@property (assign, nonatomic) float comboTimeKeeper;
 @property (assign, nonatomic) float beatLength;
 @end

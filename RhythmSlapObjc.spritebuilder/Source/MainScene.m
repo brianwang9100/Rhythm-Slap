@@ -21,6 +21,11 @@
 
     int _currentNumOfBeats;
     int _waveNumOfBeats;
+   
+    int _pointMultiplier;
+    int _totalScore;
+    
+    CCLabelTTF *_totalScoreLabel;
 
     BOOL _gameCountdownMode;
     int _gameCountdown;
@@ -146,6 +151,7 @@
 {
     _timer.currentTime += delta;
     _gestureTimeStamp += delta;
+    _timer.comboTimeKeeper += delta;
     
     if (!_gameStarted)
     {
@@ -170,6 +176,16 @@
     }
     else if (!_gameEnded)
     {
+        if (_comboMode && _timer.comboTimeKeeper >= _beatLength)
+        {
+            _pointMultiplier++;
+            _timer.comboTimeKeeper = 0;
+        }
+        else
+        {
+            _pointMultiplier = 1;
+        }
+        
         if (_currentNumOfBeats >= _waveNumOfBeats)
         {
             [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
@@ -383,6 +399,7 @@
     _gestureRecognized  = FALSE;
     _allowGesture = TRUE;
 }
+
 -(void) swipeLeft
 {
     if (!_gestureRecognized && _allowGesture)
@@ -588,6 +605,7 @@
     postGamePopUp.userInteractionEnabled = TRUE;
     postGamePopUp.positionType = CCPositionTypePoints;
     postGamePopUp.position = ccp(self.contentSizeInPoints.width*.5,self.contentSizeInPoints.height * .5);
+    postGamePopUp.
     [self addChild:postGamePopUp];
     
 }
@@ -612,5 +630,32 @@
     _currentGestureSet = [_queue objectAtIndex:0];
 }
 
+-(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object withColor: (CCColor*) color
+{
+    @synchronized(self)
+    {
+        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"%@Particle", particleName]];
+        explosion.autoRemoveOnFinish = TRUE;
+        explosion.position = object.position;
+        explosion.startColor = color;
+        explosion.endColor = color;
+        [self addChild: explosion];
+    }
+}
+-(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object withDirection: (NSString*) direction{
+    @synchronized(self)
+    {
+        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"%@Particle%@", particleName, direction]];
+        explosion.autoRemoveOnFinish = TRUE;
+        explosion.position = object.position;
+        [self addChild: explosion];
+    }
+}
+
+-(void) addScore: (int) score
+{
+    _totalScore += score * _pointMultiplier;
+    _totalScoreLabel.string = [NSString stringWithFormat:@"%i", _totalScore];
+}
 
 @end
