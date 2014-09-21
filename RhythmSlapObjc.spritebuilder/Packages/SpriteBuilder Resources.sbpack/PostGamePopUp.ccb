@@ -225,10 +225,10 @@
 								<string>Color4</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
 								</array>
 							</dict>
 							<dict>
@@ -238,7 +238,7 @@
 								<string>FloatScale</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
+									<real>10</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -1318,6 +1318,8 @@
 								</array>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>UUID</key>
@@ -1965,10 +1967,10 @@
 						<string>Size</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
-							<real>1</real>
-							<integer>2</integer>
-							<integer>2</integer>
+							<real>320</real>
+							<real>560</real>
+							<integer>0</integer>
+							<integer>0</integer>
 						</array>
 					</dict>
 					<dict>
@@ -2017,8 +2019,6 @@
 						<real>0.0</real>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
