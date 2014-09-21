@@ -11,6 +11,8 @@
 @implementation StartScene
 {
     Face *_face;
+    CCNodeColor *_topBar;
+    CCNodeColor *_bottomBar;
     
     UISwipeGestureRecognizer *_swipeLeft;
     UISwipeGestureRecognizer *_swipeRight;
@@ -20,6 +22,21 @@
 
 -(void) didLoadFromCCB
 {
+    _topBar.position = ccp(0, -200);
+    id topBarDropDown = [CCActionMoveTo actionWithDuration:1 position:ccp(0, 0)];
+    id topBarElasticDown = [CCActionEaseElasticInOut actionWithAction:topBarDropDown period:.4];
+    [_topBar runAction:topBarElasticDown];
+    
+    _bottomBar.position = ccp(0, -200);
+    id botBarDropDown = [CCActionMoveTo actionWithDuration:1.25 position:ccp(0, 0)];
+    id botBarElasticDown = [CCActionEaseElasticInOut actionWithAction:botBarDropDown period:.4];
+    [_bottomBar runAction:botBarElasticDown];
+    
+    _face.position = ccp(-200, 0);
+    id faceSlide = [CCActionMoveTo actionWithDuration:1.5 position:ccp(0.5, 0.5)];
+    id faceElasticSlide = [CCActionEaseElasticInOut actionWithAction:faceSlide period:.4];
+    [_face runAction:faceElasticSlide];
+    
     // listen for swipes to the left
     _swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft)];
     _swipeLeft.direction = UISwipeGestureRecognizerDirectionLeft;
