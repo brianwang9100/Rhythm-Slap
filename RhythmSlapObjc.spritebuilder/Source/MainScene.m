@@ -693,26 +693,13 @@
     _currentGestureSet = [_queue objectAtIndex:0];
 }
 
--(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object withColor: (CCColor*) color
-{
-    @synchronized(self)
-    {
-        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle", particleName]];
-        explosion.autoRemoveOnFinish = TRUE;
-        explosion.position = object.position;
-        
-        explosion.startColor = color;
-        explosion.endColor = color;
-        [self addChild: explosion];
-    }
-}
 -(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object withDirection: (NSString*) direction{
     @synchronized(self)
     {
         CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle%@", particleName, direction]];
         explosion.autoRemoveOnFinish = TRUE;
         explosion.position = object.position;
-        [self addChild: explosion];
+        [_face addChild: explosion];
     }
 }
 -(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object
@@ -722,7 +709,7 @@
         CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/@%Particle", particleName]];
         explosion.autoRemoveOnFinish = TRUE;
         explosion.position = object.position;
-        [self addChild: explosion];
+        [_face addChild: explosion];
     }
 }
 
