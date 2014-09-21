@@ -13,7 +13,7 @@
 -(void) didLoadFromCCB
 {
     self.totalSize = 100;
-    self.currentSize = 10;
+    self.currentSize = 50;
 }
 
 -(void) update:(CCTime)delta
