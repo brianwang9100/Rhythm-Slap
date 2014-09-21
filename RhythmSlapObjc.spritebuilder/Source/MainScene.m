@@ -8,6 +8,7 @@
 
 #import "MainScene.h"
 #import <AudioToolbox/AudioToolbox.h>
+@import AVFoundation;
 #define ARC4RANDOM_MAX 0x100000000
 
 @implementation MainScene
@@ -63,6 +64,14 @@
     BOOL _percentageAlreadySubtracted;
     
     float _soundTicker;
+    AVAudioPlayer *_lowBeatAudioPlayer;
+    AVAudioPlayer *_medBeatAudioPlayer;
+    AVAudioPlayer *_highBeatAudioPlayer;
+    AVAudioPlayer *_leftAudioPlayer;
+    AVAudioPlayer *_rightAudioPlayer;
+    AVAudioPlayer *_upAudioPlayer;
+    AVAudioPlayer *_downAudioPlayer;
+    
     NSURL *_lowBeat;
     NSURL *_medBeat;
     NSURL *_highBeat;
@@ -70,6 +79,7 @@
     NSURL *_rightBeat;
     NSURL *_upBeat;
     NSURL *_downBeat;
+    
 }
 
 -(void) didLoadFromCCB
@@ -89,6 +99,14 @@
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)_rightBeat, &rightBeatSoundID);
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)_upBeat, &upBeatSoundID);
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)_downBeat, &downBeatSoundID);
+    
+    AVAudioPlayer *_lowBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_lowBeat error:nil];
+    AVAudioPlayer *_medBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_medBeat error:nil];
+    AVAudioPlayer *_highBeatAudioPlayer= [[AVAudioPlayer alloc] initWithContentsOfURL:_highBeat error:nil];
+    AVAudioPlayer *_leftAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_leftBeat error:nil];
+    AVAudioPlayer *_rightAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_rightBeat error:nil];
+    AVAudioPlayer *_upAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_upBeat error:nil];
+    AVAudioPlayer *_downAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_downBeat error:nil];
     
     self.userInteractionEnabled = FALSE;
     _gestureMessage.string = @"";
@@ -186,11 +204,13 @@
         {
             if (_soundTicker >= _beatLength)
             {
-                AudioServicesPlaySystemSound(lowBeatSoundID);
+                [_lowBeatAudioPlayer prepareToPlay];
+                [_lowBeatAudioPlayer play];
             }
             if (_soundTicker < _beatLength && _soundTicker >= 2 * _beatLength)
             {
-                AudioServicesPlaySystemSound(highBeatSoundID);
+                [_highBeatAudioPlayer prepareToPlay];
+                [_highBeatAudioPlayer play];
             }
             
             if (_timer.currentTime >= 2*_beatLength)
@@ -242,7 +262,8 @@
             if ([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"]&& (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
-                AudioServicesPlaySystemSound(medBeatSoundID);
+                [_medBeatAudioPlayer prepareToPlay];
+                [_medBeatAudioPlayer play];
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
@@ -291,7 +312,8 @@
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
-                AudioServicesPlaySystemSound(medBeatSoundID);
+                [_medBeatAudioPlayer prepareToPlay];
+                [_medBeatAudioPlayer play];
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
@@ -338,7 +360,8 @@
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
-                AudioServicesPlaySystemSound(medBeatSoundID);
+                [_medBeatAudioPlayer prepareToPlay];
+                [_medBeatAudioPlayer play];
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
@@ -385,7 +408,8 @@
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
-                AudioServicesPlaySystemSound(medBeatSoundID);
+                [_medBeatAudioPlayer prepareToPlay];
+                [_medBeatAudioPlayer play];
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
@@ -444,7 +468,8 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitLeft];
-        AudioServicesPlaySystemSound(leftBeatSoundID);
+        [_leftAudioPlayer prepareToPlay];
+        [_leftAudioPlayer play];
         [self loadParticleExplosionWithParticleName:@"Spit" onObject:_face withDirection:@"Left"];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"LeftSlap"])
@@ -489,7 +514,8 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitRight];
-        AudioServicesPlaySystemSound(rightBeatSoundID);
+        [_rightAudioPlayer prepareToPlay];
+        [_rightAudioPlayer play];
         [self loadParticleExplosionWithParticleName:@"Spit" onObject:_face withDirection:@"Right"];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"RightSlap"])
@@ -535,7 +561,8 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitUp];
-        AudioServicesPlaySystemSound(upBeatSoundID);
+        [_upAudioPlayer prepareToPlay];
+        [_upAudioPlayer play];
         [self loadParticleExplosionWithParticleName:@"Stars" onObject:_face];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"UpSlap"])
@@ -582,7 +609,8 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitDown];
-        AudioServicesPlaySystemSound(downBeatSoundID);
+        [_downAudioPlayer prepareToPlay];
+        [_downAudioPlayer play];
         [self loadParticleExplosionWithParticleName:@"Stars" onObject:_face];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"DownSlap"])
@@ -629,18 +657,19 @@
     _comboBar.currentSize += percent;
     if (percent < 0)
     {
-        AudioServicesPlaySystemSound(lowBeatSoundID);
+        [_lowBeatAudioPlayer prepareToPlay];
+        [_lowBeatAudioPlayer play];
         if (_comboMode)
         {
-            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(1, .5) withColor:[CCColor whiteColor]];
+            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(-1, .5) withColor:[CCColor whiteColor]];
         }
         else if (_comboBar.currentSize <33)
         {
-            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(1, .5) withColor:[CCColor redColor]];
+            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(-1, .5) withColor:[CCColor redColor]];
         }
         else
         {
-            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(1, .5) withColor:[CCColor cyanColor]];
+            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(-1, .5) withColor:[CCColor cyanColor]];
         }
     }
     
