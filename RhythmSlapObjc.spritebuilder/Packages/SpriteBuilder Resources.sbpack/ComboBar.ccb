@@ -168,8 +168,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>selected</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>UUID</key>
@@ -526,7 +524,7 @@
 								<key>value</key>
 								<array>
 									<real>1</real>
-									<real>0.0</real>
+									<real>0.43333333730697632</real>
 									<real>0.0</real>
 									<real>1</real>
 								</array>
@@ -538,6 +536,17 @@
 								<string>Float</string>
 								<key>value</key>
 								<real>1</real>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>blendFunc</string>
+								<key>type</key>
+								<string>Blendmode</string>
+								<key>value</key>
+								<array>
+									<integer>1</integer>
+									<integer>1</integer>
+								</array>
 							</dict>
 						</array>
 						<key>seqExpanded</key>
@@ -635,6 +644,8 @@
 						<real>1</real>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -754,15 +765,15 @@
 				<integer>12</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>-1</integer>
+			<integer>0</integer>
 			<key>length</key>
-			<real>10</real>
+			<real>6</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.0</real>
+			<real>3.6484375</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>0.43333333730697632</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

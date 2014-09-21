@@ -206,13 +206,14 @@
             
             if ([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"]&& (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
-                    _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
-                    [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
-                    _currentGestureSetIndex++;
-                    _currentNumOfBeats+=_currentGesture.timeStamp;
-                
-                    _timer.currentTime = 0;
-                    _gestureTimeStamp = 0;
+                [_face reset];
+                _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
+                [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
+                _currentGestureSetIndex++;
+                _currentNumOfBeats+=_currentGesture.timeStamp;
+            
+                _timer.currentTime = 0;
+                _gestureTimeStamp = 0;
             }
             else
             {
@@ -253,8 +254,8 @@
             
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
+                [_face reset];
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
-                
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
                 _currentNumOfBeats+=_currentGesture.timeStamp;
@@ -299,6 +300,7 @@
             
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
+                [_face reset];
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
@@ -344,8 +346,8 @@
             
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
+                [_face reset];
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
-                
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
                 _currentNumOfBeats+=_currentGesture.timeStamp;
@@ -402,6 +404,8 @@
 {
     if (!_gestureRecognized && _allowGesture)
     {
+        [_face hitLeft];
+        [self loadParticleExplosionWithParticleName:@"Spit" onObject:_face withDirection:@"Left"];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"LeftSlap"])
         {
@@ -444,6 +448,8 @@
 {
     if (!_gestureRecognized && _allowGesture)
     {
+        [_face hitRight];
+        [self loadParticleExplosionWithParticleName:@"Spit" onObject:_face withDirection:@"Right"];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"RightSlap"])
         {
@@ -487,6 +493,8 @@
 {
     if (!_gestureRecognized && _allowGesture)
     {
+        [_face hitUp];
+        [self loadParticleExplosionWithParticleName:@"Stars" onObject:_face];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"UpSlap"])
         {
@@ -531,6 +539,8 @@
 {
     if (!_gestureRecognized && _allowGesture)
     {
+        [_face hitDown];
+        [self loadParticleExplosionWithParticleName:@"Stars" onObject:_face];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"DownSlap"])
         {
@@ -574,24 +584,42 @@
 -(void) setPercentage: (int) percent
 {
     _comboBar.currentSize += percent;
+    if (percent < 0)
+    {
+        
+        if (_comboMode)
+        {
+            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(_comboBar.comboSize.contentSize.width, _comboBar.contentSize.height*.5) withColor:[CCColor whiteColor]];
+        }
+        else if (_comboBar.currentSize <33)
+        {
+            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(_comboBar.comboSize.contentSize.width, _comboBar.contentSize.height*.5) withColor:[CCColor redColor]];
+        }
+        else
+        {
+            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(_comboBar.comboSize.contentSize.width, _comboBar.contentSize.height*.5) withColor:[CCColor cyanColor]];
+        }
+    }
     
     if (_comboBar.currentSize>= 100)
     {
         _comboBar.currentSize = 100;
         _comboMode = TRUE;
-        _colorGradientNode.startColor = [CCColor grayColor];
+        _colorGradientNode.visible = TRUE;
         _glowNode.visible = TRUE;
         _comboBar.comboBarGradient.visible = TRUE;
         _comboBar.comboGlowNode.visible = TRUE;
+        _gestureMessage.color = [CCColor whiteColor];
     }
     else
     {
         _comboMode = FALSE;
         _pointMultiplier = 1;
-        _colorGradientNode.startColor = [CCColor whiteColor];
+        _colorGradientNode.visible = FALSE;
         _glowNode.visible = FALSE;
         _comboBar.comboBarGradient.visible = FALSE;
         _comboBar.comboGlowNode.visible = FALSE;
+        _gestureMessage.color = [CCColor blackColor];
     }
     
     if (_comboBar.currentSize <= 0)
@@ -669,9 +697,10 @@
 {
     @synchronized(self)
     {
-        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"%@Particle", particleName]];
+        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle", particleName]];
         explosion.autoRemoveOnFinish = TRUE;
         explosion.position = object.position;
+        
         explosion.startColor = color;
         explosion.endColor = color;
         [self addChild: explosion];
@@ -680,7 +709,17 @@
 -(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object withDirection: (NSString*) direction{
     @synchronized(self)
     {
-        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"%@Particle%@", particleName, direction]];
+        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle%@", particleName, direction]];
+        explosion.autoRemoveOnFinish = TRUE;
+        explosion.position = object.position;
+        [self addChild: explosion];
+    }
+}
+-(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object
+{
+    @synchronized(self)
+    {
+        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/@%Particle", particleName]];
         explosion.autoRemoveOnFinish = TRUE;
         explosion.position = object.position;
         [self addChild: explosion];
