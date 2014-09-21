@@ -111,11 +111,7 @@
     _gestureRecognized = FALSE;
     _beatLength = .7;
     _percentageAlreadySubtracted = FALSE;
-    
-//    _fourSlap = [NSArray arrayWithObjects: [SingleSlap alloc],[SingleSlap alloc], [SingleSlap alloc], [SingleSlap alloc], nil];
-//    _threeSlapOneDouble = [NSArray arrayWithObjects: [SingleSlap alloc],[SingleSlap alloc], [SingleSlap alloc], [DoubleSlap alloc], nil];
-//    _twoDoubleOneTriple = [NSArray arrayWithObjects: [DoubleSlap alloc],[DoubleSlap alloc], [TripleSlap alloc], nil];
-//    _twoSlapOneDown = [NSArray arrayWithObjects: [SingleSlap alloc],[SingleSlap alloc], [SlapDown alloc], nil];
+
     
     
     _fourSlap = [NSArray arrayWithObjects:  [[SlapGestures alloc] initWithTime: 1 andType: @"SLAP!"],
