@@ -7,7 +7,8 @@
 //
 
 #import "CCScene.h"
+#import "Hand.h"
+#import "Face.h"
 
 @interface StartScene : CCScene
-
 @end

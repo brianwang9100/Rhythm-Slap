@@ -50,8 +50,6 @@
 				<string></string>
 				<key>displayName</key>
 				<string>CCNodeGradient</string>
-				<key>locked</key>
-				<true/>
 				<key>memberVarAssignmentName</key>
 				<string>_colorGradientNode</string>
 				<key>memberVarAssignmentType</key>
@@ -423,8 +421,6 @@
 				<string></string>
 				<key>displayName</key>
 				<string>CCNodeColor</string>
-				<key>locked</key>
-				<true/>
 				<key>memberVarAssignmentName</key>
 				<string>_glowNode</string>
 				<key>memberVarAssignmentType</key>
@@ -514,7 +510,7 @@
 						<array>
 							<real>1</real>
 							<real>0.0</real>
-							<real>0.0</real>
+							<real>0.033333301544189453</real>
 							<real>1</real>
 						</array>
 					</dict>
@@ -525,17 +521,6 @@
 						<string>Float</string>
 						<key>value</key>
 						<real>1</real>
-					</dict>
-					<dict>
-						<key>name</key>
-						<string>blendFunc</string>
-						<key>type</key>
-						<string>Blendmode</string>
-						<key>value</key>
-						<array>
-							<integer>1</integer>
-							<integer>1</integer>
-						</array>
 					</dict>
 				</array>
 				<key>seqExpanded</key>
@@ -822,6 +807,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -1172,9 +1159,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>4.9328126907348633</real>
+			<real>2.5994791984558105</real>
 			<key>position</key>
-			<real>6</real>
+			<real>5.9666666984558105</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
