@@ -12,4 +12,6 @@
 @property (assign, nonatomic) float totalSize;
 @property (assign, nonatomic) float currentSize;
 @property (strong, nonatomic) CCNodeColor *comboSize;
+@property (strong, nonatomic) CCNodeColor *comboGlowNode;
+@property (strong, nonatomic) CCNodeGradient *comboBarGradient;
 @end

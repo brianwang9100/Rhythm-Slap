@@ -10,14 +10,6 @@
 
 @implementation GameEndPopUp
 {
-    CCNodeColor *_gameOverColor;
-    CCLabelTTF *_gameOverText;
-    CCLabelTTF *_yourScoreTitle;
-    CCLabelTTF *_yourScoreNum;
-    CCLabelTTF *_highScoreTitle;
-    CCLabelTTF *_highScoreNum;
-    CCButton *_tryAgain;
-    CCButton *_mainMenu;
 }
 
 -(void) didLoadFromCCB

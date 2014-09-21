@@ -18,6 +18,7 @@
     CCNodeGradient *_colorGradientNode;
     CCNodeColor *_glowNode;
     CCLabelTTF *_gestureMessage;
+    NSUserDefaults _defaults;
 
     int _currentNumOfBeats;
     int _waveNumOfBeats;
@@ -65,6 +66,7 @@
 {
     self.userInteractionEnabled = FALSE;
     _gestureMessage.string = @"";
+    _defaults = [NSUserDefaults standardUserDefaults];
     
     _timer = [Timer alloc];
     
@@ -180,10 +182,19 @@
         {
             _pointMultiplier++;
             _timer.comboTimeKeeper = 0;
+            _colorGradientNode.startColor = [CCColor grayColor];
+            _glowNode.visible = TRUE;
+            _comboBar.comboBarGradient.visible = TRUE;
+            _comboBar.comboGlowNode.visible = TRUE;
+            
         }
         else
         {
             _pointMultiplier = 1;
+            _colorGradientNode.startColor = [CCColor whiteColor];
+            _glowNode.visible = FALSE;
+            _comboBar.comboBarGradient.visible = FALSE;
+            _comboBar.comboGlowNode.visible = FALSE;
         }
         
         if (_currentNumOfBeats >= _waveNumOfBeats)
@@ -411,27 +422,32 @@
             {
                 _gestureMessage.string = @"PERFECT!";
                 [self setPercentage: 6 * _currentGesture.timeStamp];
+                [self addScore: 50];
             }
             else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
             {
                 _gestureMessage.string = @"GOOD";
                 [self setPercentage: 4 * _currentGesture.timeStamp];
+                [self addScore: 25];
             }
             else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
             {
                 _gestureMessage.string = @"OK";
                 [self setPercentage: 2 * _currentGesture.timeStamp];
+                [self addScore: 10];
             }
             else if (_gestureTimeStamp <= .8 * convertedTime)
             {
                 _gestureMessage.string = @"TOO EARLY!";
                 [self setPercentage: -6 * _currentGesture.timeStamp];
+                [self addScore: -25];
             }
         }
         else
         {
             _gestureMessage.string = @"WRONG SLAP";
             [self setPercentage: -6 * _currentGesture.timeStamp];
+            [self addScore: -25];
         }
         _gestureRecognized = TRUE;
         _allowGesture = FALSE;
@@ -448,21 +464,25 @@
             {
                 _gestureMessage.string = @"PERFECT!";
                 [self setPercentage: 6 * _currentGesture.timeStamp];
+                [self addScore: 50];
             }
             else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
             {
                 _gestureMessage.string = @"GOOD";
                 [self setPercentage: 4 * _currentGesture.timeStamp];
+                [self addScore: 25];
             }
             else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
             {
                 _gestureMessage.string = @"OK";
                 [self setPercentage: 2 * _currentGesture.timeStamp];
+                [self addScore: 10];
             }
             else if (_gestureTimeStamp <= .8 * convertedTime)
             {
                 _gestureMessage.string = @"TOO EARLY!";
                 [self setPercentage: -6 * _currentGesture.timeStamp];
+                [self addScore: -25];
             }
             
         }
@@ -470,6 +490,7 @@
         {
             _gestureMessage.string = @"WRONG SLAP";
             [self setPercentage: -6 * _currentGesture.timeStamp];
+            [self addScore: -25];
         }
         _gestureRecognized = TRUE;
         _allowGesture = FALSE;
@@ -486,21 +507,25 @@
             {
                 _gestureMessage.string = @"PERFECT!";
                 [self setPercentage: 6 * _currentGesture.timeStamp];
+                [self addScore: 50];
             }
             else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
             {
                 _gestureMessage.string = @"GOOD";
                 [self setPercentage: 4 * _currentGesture.timeStamp];
+                [self addScore: 25];
             }
             else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
             {
                 _gestureMessage.string = @"OK";
                 [self setPercentage: 2 * _currentGesture.timeStamp];
+                [self addScore: 10];
             }
             else if (_gestureTimeStamp <= .8 * convertedTime)
             {
                 _gestureMessage.string = @"TOO EARLY!";
                 [self setPercentage: -6 * _currentGesture.timeStamp];
+                [self addScore: -25];
             }
             
         }
@@ -508,6 +533,7 @@
         {
             _gestureMessage.string = @"WRONG SLAP";
             [self setPercentage: -6 * _currentGesture.timeStamp];
+            [self addScore: -25];
         }
         _gestureRecognized = TRUE;
         _allowGesture = FALSE;
@@ -525,21 +551,25 @@
             {
                 _gestureMessage.string = @"PERFECT!";
                 [self setPercentage: 6 * _currentGesture.timeStamp];
+                [self addScore: 50];
             }
             else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
             {
                 _gestureMessage.string = @"GOOD";
                 [self setPercentage: 4 * _currentGesture.timeStamp];
+                [self addScore: 25];
             }
             else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
             {
                 _gestureMessage.string = @"OK";
                 [self setPercentage: 2 * _currentGesture.timeStamp];
+                [self addScore: 10];
             }
             else if (_gestureTimeStamp <= .8 * convertedTime)
             {
                 _gestureMessage.string = @"TOO EARLY!";
                 [self setPercentage: -6 * _currentGesture.timeStamp];
+                [self addScore: -25];
             }
             
         }
@@ -547,6 +577,7 @@
         {
             _gestureMessage.string = @"WRONG SLAP";
             [self setPercentage: -6 * _currentGesture.timeStamp];
+            [self addScore: -25];
         }
         _gestureRecognized = TRUE;
         _allowGesture = FALSE;
@@ -605,7 +636,15 @@
     postGamePopUp.userInteractionEnabled = TRUE;
     postGamePopUp.positionType = CCPositionTypePoints;
     postGamePopUp.position = ccp(self.contentSizeInPoints.width*.5,self.contentSizeInPoints.height * .5);
-    postGamePopUp.
+    
+    postGamePopUp.yourScoreNum.string = [NSString stringWithFormat:@"%i", _totalScore];
+    if ([_defaults objectForKey:@"highScore"] == nil || _totalScore > [[_defaults objectForKey:@"highScore"] intValue])
+    {
+        postGamePopUp.highScoreTitle.string = @"NEW HIGH SCORE";
+        [_defaults setObject:[NSNumber numberWithInt: _totalScore] forKey:@"highScore"];
+        [_defaults synchronize];
+    }
+    postGamePopUp.highScoreNum.string = [NSString stringWithFormat:@"%i",[[_defaults objectForKey:@"highScore"] intValue]];
     [self addChild:postGamePopUp];
     
 }
@@ -654,7 +693,7 @@
 
 -(void) addScore: (int) score
 {
-    _totalScore += score * _pointMultiplier;
+    _totalScore += score * _pointMultiplier *_currentGesture.timeStamp;
     _totalScoreLabel.string = [NSString stringWithFormat:@"%i", _totalScore];
 }
 
