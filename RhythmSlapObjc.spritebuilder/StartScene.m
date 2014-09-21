@@ -21,6 +21,23 @@
     UISwipeGestureRecognizer *_swipeRight;
     UISwipeGestureRecognizer *_swipeUp;
     UISwipeGestureRecognizer *_swipeDown;
+    
+    AVAudioPlayer *_lowBeatAudioPlayer;
+    AVAudioPlayer *_medBeatAudioPlayer;
+    AVAudioPlayer *_highBeatAudioPlayer;
+    AVAudioPlayer *_leftAudioPlayer;
+    AVAudioPlayer *_rightAudioPlayer;
+    AVAudioPlayer *_upAudioPlayer;
+    AVAudioPlayer *_downAudioPlayer;
+    
+    NSURL *_lowBeat;
+    NSURL *_medBeat;
+    NSURL *_highBeat;
+    NSURL *_leftBeat;
+    NSURL *_rightBeat;
+    NSURL *_upBeat;
+    NSURL *_downBeat;
+
 }
 
 -(void) didLoadFromCCB
@@ -56,11 +73,29 @@
     _swipeDown = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeDown)];
     _swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
     [[[CCDirector sharedDirector] view] addGestureRecognizer:_swipeDown];
+    
+    _lowBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_bfxr" ofType:@"wav"]];
+    _medBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_high" ofType:@"wav"]];
+    _highBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_higher" ofType:@"wav"]];
+    _leftBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"left_bfxr" ofType:@"wav"]];
+    _rightBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"right_bfxr" ofType:@"wav"]];
+    _upBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"uppercut_bfxr" ofType:@"wav"]];
+    _downBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"headbash_bfxr" ofType:@"wav"]];
+    
+    _lowBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_lowBeat error:nil];
+    _medBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_medBeat error:nil];
+    _highBeatAudioPlayer= [[AVAudioPlayer alloc] initWithContentsOfURL:_highBeat error:nil];
+    _leftAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_leftBeat error:nil];
+    _rightAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_rightBeat error:nil];
+    _upAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_upBeat error:nil];
+    _downAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_downBeat error:nil];
+
 }
 
 -(void) swipeLeft
 {
     [_face hitLeft];
+    [_leftAudioPlayer play];
     [self removeBars];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
     
@@ -70,6 +105,7 @@
 {
     //animate face
     [_face hitRight];
+    [_rightAudioPlayer play];
     [self removeBars];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
@@ -78,6 +114,7 @@
 {
     //animate face
     [_face hitUp];
+    [_upAudioPlayer play];
     [self removeBars];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
@@ -86,12 +123,12 @@
 {
     //animate face
     [_face hitDown];
+    [_downAudioPlayer play];
     [self removeBars];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
 -(void) removeBars
 {
-    
     id topBarUp = [CCActionMoveTo actionWithDuration:1 position:ccp(0, -200)];
     id topBarElasticUp = [CCActionEaseElasticInOut actionWithAction:topBarUp period:.4];
     [_topBar runAction:topBarElasticUp];

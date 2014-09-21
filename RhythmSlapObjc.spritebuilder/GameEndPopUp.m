@@ -10,6 +10,22 @@
 
 @implementation GameEndPopUp
 {
+    AVAudioPlayer *_lowBeatAudioPlayer;
+    AVAudioPlayer *_medBeatAudioPlayer;
+    AVAudioPlayer *_highBeatAudioPlayer;
+    AVAudioPlayer *_leftAudioPlayer;
+    AVAudioPlayer *_rightAudioPlayer;
+    AVAudioPlayer *_upAudioPlayer;
+    AVAudioPlayer *_downAudioPlayer;
+    
+    NSURL *_lowBeat;
+    NSURL *_medBeat;
+    NSURL *_highBeat;
+    NSURL *_leftBeat;
+    NSURL *_rightBeat;
+    NSURL *_upBeat;
+    NSURL *_downBeat;
+    
 }
 
 -(void) didLoadFromCCB
@@ -51,16 +67,35 @@
     id mainMenuDropDown = [CCActionMoveTo actionWithDuration:4 position:ccp(.5, .125)];
     id mainMenuElasticDown = [CCActionEaseElasticInOut actionWithAction:mainMenuDropDown period:.4];
     [_mainMenu runAction:mainMenuElasticDown];
+    
+    _lowBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_bfxr" ofType:@"wav"]];
+    _medBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_high" ofType:@"wav"]];
+    _highBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_higher" ofType:@"wav"]];
+    _leftBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"left_bfxr" ofType:@"wav"]];
+    _rightBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"right_bfxr" ofType:@"wav"]];
+    _upBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"uppercut_bfxr" ofType:@"wav"]];
+    _downBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"headbash_bfxr" ofType:@"wav"]];
+    
+    _lowBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_lowBeat error:nil];
+    _medBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_medBeat error:nil];
+    _highBeatAudioPlayer= [[AVAudioPlayer alloc] initWithContentsOfURL:_highBeat error:nil];
+    _leftAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_leftBeat error:nil];
+    _rightAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_rightBeat error:nil];
+    _upAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_upBeat error:nil];
+    _downAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_downBeat error:nil];
+
 }
 
 -(void) retry
 {
+    [_lowBeatAudioPlayer play];
     CCScene *mainScene = [CCBReader loadAsScene:@"MainScene"];
     [[CCDirector sharedDirector] replaceScene: mainScene];
 }
 
 -(void) mainMenu
 {
+    [_highBeatAudioPlayer play];
     CCScene *startScene = [CCBReader loadAsScene:@"StartScene"];
     [[CCDirector sharedDirector] replaceScene: startScene];
 }

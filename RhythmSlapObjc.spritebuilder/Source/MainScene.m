@@ -20,6 +20,7 @@
     CCNodeGradient *_colorGradientNode;
     CCNodeColor *_glowNode;
     CCLabelTTF *_gestureMessage;
+    CCLabelTTF *_comboModeLabel;
     NSUserDefaults *_defaults;
 
     int _currentNumOfBeats;
@@ -29,6 +30,7 @@
     int _totalScore;
     
     CCLabelTTF *_totalScoreLabel;
+    CCLabelTTF *_tutorialLabel;
 
     BOOL _gameCountdownMode;
     int _gameCountdown;
@@ -44,6 +46,7 @@
     NSArray *_twoSlapOneDown;
 
     NSMutableArray *_queue;
+    NSMutableArray *_queueForTutorial;
 
     int _comboBarSize;
 
@@ -92,14 +95,6 @@
     _upBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"uppercut_bfxr" ofType:@"wav"]];
     _downBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"headbash_bfxr" ofType:@"wav"]];
     
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_lowBeat, &lowBeatSoundID);
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_medBeat, &medBeatSoundID);
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_highBeat, &highBeatSoundID);
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_leftBeat, &leftBeatSoundID);
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_rightBeat, &rightBeatSoundID);
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_upBeat, &upBeatSoundID);
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_downBeat, &downBeatSoundID);
-    
     _lowBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_lowBeat error:nil];
     _medBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_medBeat error:nil];
     _highBeatAudioPlayer= [[AVAudioPlayer alloc] initWithContentsOfURL:_highBeat error:nil];
@@ -129,7 +124,16 @@
     _gestureRecognized = FALSE;
     _beatLength = .7;
     _percentageAlreadySubtracted = FALSE;
-
+    
+    [self resetDefaults];
+    
+    //TUTORIAL MODE
+    if ([_defaults objectForKey:@"tutorial"] == nil)
+    {
+        _tutorialMode = TRUE;
+        [_defaults setBool: TRUE forKey:@"tutorial"];
+        [_defaults synchronize];
+    }
     
     
     _fourSlap = [NSArray arrayWithObjects:  [[SlapGestures alloc] initWithTime: 1 andType: @"SLAP!"],
@@ -171,6 +175,7 @@
 
     
     _queue = [NSMutableArray arrayWithObjects: _fourSlap, _threeSlapOneDouble, _twoDoubleOneTriple, _twoSlapOneDown,  nil];
+    _queue = [NSMutableArray arrayWithObjects: _fourSlap, _threeSlapOneDouble, _twoDoubleOneTriple, _twoSlapOneDown,  nil];
     
     // listen for swipes to the left
     _swipeLeft = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeLeft)];
@@ -210,6 +215,10 @@
                     [self performSelector:@selector(startGame) withObject:nil afterDelay:_beatLength];
                     //[self startGame];
                 }
+                else if (_gameCountdown == 4)
+                {
+                    _gestureMessage.string = @"SLAP TO THE BEAT!";
+                }
                 else if (_gameCountdown < 4 && _gameCountdown > 0)
                 {
                     _gestureMessage.string = [NSString stringWithFormat:@"%i", _gameCountdown];
@@ -221,18 +230,34 @@
     }
     else if (!_gameEnded)
     {
+        if (_tutorialMode)
+        {
+            _tutorialLabel.visible = TRUE;
+        }
+        
         if (_comboMode && _timer.comboTimeKeeper >= _beatLength)
         {
             _pointMultiplier++;
             _timer.comboTimeKeeper = 0;
-            
+            _comboModeLabel.string = [NSString stringWithFormat:@"COMBO MODE x%i", _pointMultiplier];
         }
         
         if (_currentNumOfBeats >= _waveNumOfBeats)
         {
-            [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
             
-            _beatLength -= .05;
+            [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
+            if (_tutorialMode)
+            {
+                _beatLength = .7;
+                _tutorialMode = FALSE;
+                _tutorialLabel.visible = FALSE;
+                _queue = nil;
+                _queue = [NSMutableArray arrayWithObjects: _fourSlap, _threeSlapOneDouble, _twoDoubleOneTriple, _twoSlapOneDown,  nil];
+            }
+            else
+            {
+                _beatLength -= .05;
+            }
             
             _gestureRecognized = TRUE;
             _allowGesture = FALSE;
@@ -263,7 +288,7 @@
             }
             else
             {
-                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength)
+                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength && !_tutorialMode)
                 {
                     _gestureTimeStamp = .2*_beatLength;
                     _timer.currentTime = .2*_beatLength;
@@ -276,15 +301,34 @@
                     _allowGesture = TRUE;
                     _currentNumOfBeats +=_currentGesture.timeStamp;
                 }
-                else if (_gestureRecognized && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
+                else if ((_gestureRecognized ||_tutorialMode) && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
                 {
                     _gestureTimeStamp = 0;
                     _timer.currentTime = 0;
-                    _currentGestureSetIndex++;
+                    
                     
                     _gestureRecognized = FALSE;
                     _allowGesture = TRUE;
                     _currentNumOfBeats +=_currentGesture.timeStamp;
+                    
+                    if (_tutorialMode)
+                    {
+                        if (_currentGestureSetIndex == 1 || _currentGestureSetIndex == 5)
+                        {
+                            [_face hitLeft];
+                            [_leftAudioPlayer play];
+                            _gestureMessage.string = @"Swipe Left!";
+                            _tutorialLabel.string = @"Swipe left or right to the \nbeat in response to SLAP!";
+                            
+                        }
+                        if (_currentGestureSetIndex == 3 || _currentGestureSetIndex == 7)
+                        {
+                            [_face hitRight];
+                            [_rightAudioPlayer play];
+                            _gestureMessage.string = @"Or Right!";
+                        }
+                    }
+                    _currentGestureSetIndex++;
                 }
                 
                 if (_currentGestureSetIndex >= [_fourSlap count])
@@ -312,7 +356,7 @@
             }
             else
             {
-                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength)
+                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength && !_tutorialMode)
                 {
                     _gestureTimeStamp = .2 * _beatLength;
                     _timer.currentTime = .2 * _beatLength;
@@ -325,17 +369,54 @@
                     _allowGesture = TRUE;
                     _currentNumOfBeats +=_currentGesture.timeStamp;
                 }
-                else if (_gestureRecognized && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
+                else if ((_gestureRecognized || _tutorialMode) && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
                 {
                     _gestureTimeStamp = 0;
                     _timer.currentTime = 0;
-                    _currentGestureSetIndex++;
                     
                     _gestureRecognized = FALSE;
                     _allowGesture = TRUE;
                     _currentNumOfBeats +=_currentGesture.timeStamp;
+                    
+                    if (_tutorialMode)
+                    {
+                        if (_currentGestureSetIndex == 1)
+                        {
+                            [_face hitLeft];
+                            [_leftAudioPlayer play];
+                            _gestureMessage.string = @"Swipe Left!";
+                            _tutorialLabel.string = @" ";
+                            
+                        }
+                        if (_currentGestureSetIndex == 3)
+                        {
+                            [_face hitRight];
+                            [_rightAudioPlayer play];
+                            _gestureMessage.string = @"Or Right!";
+                        }
+                        if (_currentGestureSetIndex == 5)
+                        {
+                            [_face hitLeft];
+                            [_leftAudioPlayer play];
+                            _gestureMessage.string = @"First Left,";
+                            _tutorialLabel.string = @"Swipe Left then Right in \nresponse to DOUBLE SLAPS!";
+                        }
+                        if (_currentGestureSetIndex == 6)
+                        {
+                            [_face hitRight];
+                            [_rightAudioPlayer play];
+                            _gestureMessage.string = @"Then Right!";
+                        }
+                        if (_currentGestureSetIndex == 9)
+                        {
+                            [_face hitRight];
+                            [_rightAudioPlayer play];
+                            _gestureMessage.string = @"";
+                        }
+                    }
+                    
+                    _currentGestureSetIndex++;
                 }
-                
                 if (_currentGestureSetIndex >= [_threeSlapOneDouble count])
                 {
                     [self loadNewGesture];
@@ -360,7 +441,7 @@
             }
             else
             {
-                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength)
+                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength && !_tutorialMode)
                 {
                     _gestureTimeStamp = .2*_beatLength;
                     _timer.currentTime = .2*_beatLength;
@@ -373,15 +454,52 @@
                     _allowGesture = TRUE;
                     _currentNumOfBeats +=_currentGesture.timeStamp;
                 }
-                else if (_gestureRecognized && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
+                else if ((_gestureRecognized || _tutorialMode) && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
                 {
                     _gestureTimeStamp = 0;
                     _timer.currentTime = 0;
-                    _currentGestureSetIndex++;
+                    
                     
                     _gestureRecognized = FALSE;
                     _allowGesture = TRUE;
                     _currentNumOfBeats +=_currentGesture.timeStamp;
+                    if (_tutorialMode)
+                    {
+                        if (_currentGestureSetIndex == 1 || _currentGestureSetIndex == 4)
+                        {
+                            [_face hitLeft];
+                            [_leftAudioPlayer play];
+                            _gestureMessage.string = @"Swipe Left!";
+                            _tutorialLabel.string = @"Be as accurate \nas possible!";
+                            
+                        }
+                        if (_currentGestureSetIndex == 2 || _currentGestureSetIndex == 5)
+                        {
+                            [_face hitRight];
+                            [_rightAudioPlayer play];
+                            _gestureMessage.string = @"Then Right!";
+                        }
+                        if (_currentGestureSetIndex == 7)
+                        {
+                            [_face hitLeft];
+                            [_leftAudioPlayer play];
+                            _gestureMessage.string = @"1. Left!";
+                            _tutorialLabel.string = @"Remember Left, Right, \nand Up for TRIPLE SLAPS!";
+                        }
+                        if (_currentGestureSetIndex == 8)
+                        {
+                            [_face hitRight];
+                            [_rightAudioPlayer play];
+                            _gestureMessage.string = @"2. Right!";
+                        }
+                        if (_currentGestureSetIndex == 9)
+                        {
+                            [_face hitUp];
+                            [_upAudioPlayer play];
+                            _gestureMessage.string = @"3. UPPERCUT!";
+                        }
+                    }
+                    _currentGestureSetIndex++;
                 }
                 
                 if (_currentGestureSetIndex >= [_twoDoubleOneTriple count])
@@ -408,7 +526,7 @@
             }
             else
             {
-                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength)
+                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength && !_tutorialMode)
                 {
                     _gestureTimeStamp = .2 * _beatLength;
                     _timer.currentTime = .2 * _beatLength;
@@ -421,7 +539,7 @@
                     _allowGesture = TRUE;
                     _currentNumOfBeats +=_currentGesture.timeStamp;
                 }
-                else if (_gestureRecognized && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
+                else if ((_gestureRecognized || _tutorialMode) && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
                 {
                     _gestureTimeStamp = 0;
                     _timer.currentTime = 0;
@@ -430,6 +548,23 @@
                     _gestureRecognized = FALSE;
                     _allowGesture = TRUE;
                     _currentNumOfBeats +=_currentGesture.timeStamp;
+                    
+                    if (_tutorialMode)
+                    {
+                        if (_currentGestureSetIndex == 1 || _currentGestureSetIndex == 3)
+                        {
+                            [_face hitLeft];
+                            [_leftAudioPlayer play];
+                            _gestureMessage.string = @"Swipin and Swipin...";
+                            _tutorialLabel.string = @"Final Slap is the HEAD BASH!";
+                        }
+                        if (_currentGestureSetIndex == 5)
+                        {
+                            [_face hitDown];
+                            [_downAudioPlayer play];
+                            _tutorialLabel.string = @"Wait for it...\nTHEN SLAP";
+                        }
+                    }
                 }
                 
                 if (_currentGestureSetIndex >= [_twoSlapOneDown count])
@@ -437,13 +572,20 @@
                     [self loadNewGesture];
                 }
             }
-
         }
     }
 }
+    
 -(void) delayWaveMessage
 {
-    _gestureMessage.string = @"WAVE COMPLETE";
+    if (_tutorialMode)
+    {
+        _gestureMessage.string = @"TUTORIAL COMPLETE";
+    }
+    else
+    {
+        _gestureMessage.string = @"WAVE COMPLETE";
+    }
 }
 
 -(void) delayAllowanceOfGesture
@@ -454,7 +596,7 @@
 
 -(void) swipeLeft
 {
-    if (!_gestureRecognized && _allowGesture)
+    if (!_gestureRecognized && _allowGesture && !_tutorialMode)
     {
         [_face hitLeft];
         [_leftAudioPlayer prepareToPlay];
@@ -500,7 +642,7 @@
 }
 -(void) swipeRight
 {
-    if (!_gestureRecognized && _allowGesture)
+    if (!_gestureRecognized && _allowGesture && !_tutorialMode)
     {
         [_face hitRight];
         [_rightAudioPlayer prepareToPlay];
@@ -547,7 +689,7 @@
 }
 -(void) swipeUp
 {
-    if (!_gestureRecognized && _allowGesture)
+    if (!_gestureRecognized && _allowGesture && !_tutorialMode)
     {
         [_face hitUp];
         [_upAudioPlayer prepareToPlay];
@@ -595,7 +737,7 @@
 
 -(void) swipeDown
 {
-    if (!_gestureRecognized && _allowGesture)
+    if (!_gestureRecognized && _allowGesture && !_tutorialMode)
     {
         [_face hitDown];
         [_downAudioPlayer prepareToPlay];
@@ -670,6 +812,8 @@
         _glowNode.visible = TRUE;
         _comboBar.comboBarGradient.visible = TRUE;
         _comboBar.comboGlowNode.visible = TRUE;
+        _comboModeLabel.visible = TRUE;
+        _totalScoreLabel.color = [CCColor whiteColor];
         _gestureMessage.color = [CCColor whiteColor];
     }
     else
@@ -680,6 +824,8 @@
         _glowNode.visible = FALSE;
         _comboBar.comboBarGradient.visible = FALSE;
         _comboBar.comboGlowNode.visible = FALSE;
+        _comboModeLabel.visible = FALSE;
+        _totalScoreLabel.color = [CCColor blackColor];
         _gestureMessage.color = [CCColor blackColor];
     }
     
