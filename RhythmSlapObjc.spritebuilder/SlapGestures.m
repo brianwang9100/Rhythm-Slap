@@ -10,4 +10,11 @@
 
 @implementation SlapGestures
 
+-(id) initWithTime: (float) givenTimeStamp andType: (NSString*) type
+{
+    self.timeStamp = givenTimeStamp;
+    self.typeOfSlapNeeded = type;
+    return self;
+}
+
 @end

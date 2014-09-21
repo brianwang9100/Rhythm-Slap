@@ -10,5 +10,6 @@
 
 @interface SlapGestures : CCNode
 @property (strong, nonatomic) NSString *typeOfSlapNeeded;
-
+@property (assign, nonatomic) float timeStamp;
+-(id) initWithTime: (float) givenTimeStamp andType: (NSString*) type;
 @end
