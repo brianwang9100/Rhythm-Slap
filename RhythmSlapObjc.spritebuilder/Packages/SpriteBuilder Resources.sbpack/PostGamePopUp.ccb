@@ -84,10 +84,10 @@
 								<key>value</key>
 								<array>
 									<real>0.5</real>
-									<real>90</real>
+									<real>0.10000000149011612</real>
 									<integer>1</integer>
 									<integer>2</integer>
-									<integer>0</integer>
+									<integer>2</integer>
 								</array>
 							</dict>
 							<dict>
@@ -322,10 +322,10 @@
 								<key>value</key>
 								<array>
 									<real>0.5</real>
-									<real>182.58279418945312</real>
+									<real>0.32813715934753418</real>
 									<integer>1</integer>
 									<integer>2</integer>
-									<integer>0</integer>
+									<integer>2</integer>
 								</array>
 							</dict>
 							<dict>
@@ -570,10 +570,10 @@
 								<key>value</key>
 								<array>
 									<real>0.5</real>
-									<real>232</real>
+									<real>0.39813718199729919</real>
 									<integer>1</integer>
 									<integer>2</integer>
-									<integer>0</integer>
+									<integer>2</integer>
 								</array>
 							</dict>
 							<dict>
@@ -787,10 +787,10 @@
 								<key>value</key>
 								<array>
 									<real>0.5</real>
-									<real>284.00006103515625</real>
+									<real>0.52813714742660522</real>
 									<integer>1</integer>
 									<integer>2</integer>
-									<integer>0</integer>
+									<integer>2</integer>
 								</array>
 							</dict>
 							<dict>
@@ -994,10 +994,10 @@
 								<key>value</key>
 								<array>
 									<real>0.5</real>
-									<real>130</real>
+									<real>0.2321428507566452</real>
 									<integer>0</integer>
 									<integer>2</integer>
-									<integer>0</integer>
+									<integer>2</integer>
 								</array>
 							</dict>
 							<dict>
@@ -1352,10 +1352,10 @@
 								<key>value</key>
 								<array>
 									<real>0.5</real>
-									<real>70</real>
+									<real>0.125</real>
 									<integer>0</integer>
 									<integer>2</integer>
-									<integer>0</integer>
+									<integer>2</integer>
 								</array>
 							</dict>
 							<dict>
@@ -1741,10 +1741,10 @@
 								<key>value</key>
 								<array>
 									<real>0.5</real>
-									<real>335.3509521484375</real>
+									<real>0.59813714027404785</real>
 									<integer>1</integer>
 									<integer>2</integer>
-									<integer>0</integer>
+									<integer>2</integer>
 								</array>
 							</dict>
 							<dict>
@@ -2017,6 +2017,8 @@
 						<real>0.0</real>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
