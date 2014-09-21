@@ -11,8 +11,11 @@
 @implementation StartScene
 {
     Face *_face;
+    CCNodeGradient *_colorGradientNode;
+    CCNodeColor *_glowNode;
     CCNodeColor *_topBar;
     CCNodeColor *_bottomBar;
+    CCNodeColor *_test;
     
     UISwipeGestureRecognizer *_swipeLeft;
     UISwipeGestureRecognizer *_swipeRight;
@@ -58,6 +61,7 @@
 -(void) swipeLeft
 {
     [_face hitLeft];
+    [self removeBars];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
     
 }
@@ -66,6 +70,7 @@
 {
     //animate face
     [_face hitRight];
+    [self removeBars];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
 
@@ -73,6 +78,7 @@
 {
     //animate face
     [_face hitUp];
+    [self removeBars];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
 
@@ -80,9 +86,24 @@
 {
     //animate face
     [_face hitDown];
+    [self removeBars];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
-
+-(void) removeBars
+{
+    
+    id topBarUp = [CCActionMoveTo actionWithDuration:1 position:ccp(0, -200)];
+    id topBarElasticUp = [CCActionEaseElasticInOut actionWithAction:topBarUp period:.4];
+    [_topBar runAction:topBarElasticUp];
+    
+    id botBarUp = [CCActionMoveTo actionWithDuration:1.25 position:ccp(0, -200)];
+    id botBarElasticUp = [CCActionEaseElasticInOut actionWithAction:botBarUp period:.4];
+    [_bottomBar runAction:botBarElasticUp];
+    
+    id fadeIn = [CCActionFadeTo actionWithDuration:1.5 opacity:1];
+    [_test runAction:fadeIn];
+    
+}
 -(void) startGame
 {
     CCScene *mainScene = [CCBReader loadAsScene:@"MainScene"];
