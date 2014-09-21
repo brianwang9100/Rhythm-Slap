@@ -971,11 +971,11 @@
         //put in information about
         _gestureMessage.string = @"";
     
-        id move = [CCActionMoveTo actionWithDuration:2 position:ccp(.5, -200)];
-        id moveElastic = [CCActionEaseElasticInOut actionWithAction: move period:.4];
+        id move = [CCActionMoveTo actionWithDuration:2 position:ccp(.5, -50)];
+        id moveElastic = [CCActionEaseElasticInOut actionWithAction: move period:.3];
         [_comboBar runAction: moveElastic];
         
-        id jump1 = [CCActionJumpTo actionWithDuration:2 position: _face.position height:150 jumps:2];
+        id jump1 = [CCActionJumpTo actionWithDuration:2 position: ccp(.3, -2) height:50 jumps:1];
         [_face runAction:jump1];
         
         [self performSelector:@selector(endGame) withObject:nil afterDelay:2];
