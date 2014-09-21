@@ -145,7 +145,7 @@
 				<string>FloatVar</string>
 				<key>value</key>
 				<array>
-					<real>0.0</real>
+					<real>1</real>
 					<real>3</real>
 				</array>
 			</dict>
@@ -156,8 +156,8 @@
 				<string>FloatVar</string>
 				<key>value</key>
 				<array>
-					<real>50</real>
-					<real>0.5</real>
+					<real>30</real>
+					<real>5</real>
 				</array>
 			</dict>
 			<dict>
@@ -200,8 +200,8 @@
 				<string>FloatVar</string>
 				<key>value</key>
 				<array>
-					<real>0.0</real>
-					<real>360</real>
+					<real>180</real>
+					<real>45</real>
 				</array>
 			</dict>
 			<dict>
@@ -283,7 +283,7 @@
 				<string>FloatVar</string>
 				<key>value</key>
 				<array>
-					<real>0.0</real>
+					<real>300</real>
 					<real>200</real>
 				</array>
 			</dict>
