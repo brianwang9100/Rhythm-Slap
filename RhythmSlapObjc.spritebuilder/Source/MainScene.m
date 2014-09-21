@@ -226,13 +226,14 @@
             }
     
         }
-        else if (_currentGesture == _threeSlapOneDouble)
+        else if (_currentGestureSet == _threeSlapOneDouble)
         {
             _currentGesture = _threeSlapOneDouble[_currentGestureSetIndex];
             
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
+                
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
                 _currentNumOfBeats++;
@@ -271,11 +272,11 @@
                 }
             }
         }
-        else if (_currentGesture == _twoDoubleOneTriple)
+        else if (_currentGestureSet == _twoDoubleOneTriple)
         {
             
         }
-        else if (_currentGesture == _twoSlapOneDown)
+        else if (_currentGestureSet == _twoSlapOneDown)
         {
             
         }
