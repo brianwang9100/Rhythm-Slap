@@ -40,8 +40,7 @@
 
 -(void) swipeLeft
 {
-    //animate face
-    _face.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed:(@"Sprites/Face/face_left.png")];
+    [_face hitLeft];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
     
 }
@@ -49,22 +48,21 @@
 -(void) swipeRight
 {
     //animate face
-    _face.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed:(@"Sprites/Face/face_left.png")];
-    _face.faceSprite.flipX = TRUE;
+    [_face hitRight];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
 
 -(void) swipeUp
 {
     //animate face
-    _face.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed:(@"Sprites/Face/face_uppercut.png")];
+    [_face hitUp];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
 
 -(void) swipeDown
 {
     //animate face
-    _face.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed:(@"Sprites/Face/face_headbash.png")];
+    [_face hitDown];
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
 

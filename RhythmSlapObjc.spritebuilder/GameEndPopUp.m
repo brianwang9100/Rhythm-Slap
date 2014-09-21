@@ -9,5 +9,24 @@
 #import "GameEndPopUp.h"
 
 @implementation GameEndPopUp
+{
+    CCNodeColor *_gameOverColor;
+    CCLabelTTF *_gameOverText;
+    CCLabelTTF *_yourScoreTitle;
+    CCLabelTTF *_yourScoreNum;
+    CCLabelTTF *_highScoreTitle;
+    CCLabelTTF *_highScoreNum;
+}
 
+-(void) retry
+{
+    CCScene *mainScene = [CCBReader loadAsScene:@"MainScene"];
+    [[CCDirector sharedDirector] replaceScene: mainScene];
+}
+
+-(void) mainMenu
+{
+    CCScene *startScene = [CCBReader loadAsScene:@"StartScene"];
+    [[CCDirector sharedDirector] replaceScene: startScene];
+}
 @end

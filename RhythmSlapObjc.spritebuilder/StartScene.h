@@ -11,10 +11,4 @@
 #import "Face.h"
 
 @interface StartScene : CCScene
-
--(void) hitLeft;
--(void) hitRight;
--(void) hitUp;
--(void) hitDown;
-
 @end
