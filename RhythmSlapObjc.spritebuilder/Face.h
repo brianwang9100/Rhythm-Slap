@@ -10,4 +10,11 @@
 
 @interface Face : CCNode
 @property (strong, nonatomic) CCSprite *faceSprite;
+
+-(void) hitLeft;
+-(void) hitRight;
+-(void) hitUp;
+-(void) hitDown;
+-(void) reset;
+
 @end

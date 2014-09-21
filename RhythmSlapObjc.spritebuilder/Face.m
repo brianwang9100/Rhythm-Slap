@@ -22,26 +22,27 @@
 
 -(void) hitLeft
 {
-    
+    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_left.png"];
 }
 
 -(void) hitRight
 {
-    
+    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_left.png"];
+    self.faceSprite.flipX = TRUE;
 }
 
 -(void) hitUp
 {
-    
+    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_uppercut.png"];
 }
 
 -(void) hitDown
 {
-    
+    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_headbash.png"];
 }
 
 -(void) reset
 {
-    
+    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_normal.png"];
 }
 @end
