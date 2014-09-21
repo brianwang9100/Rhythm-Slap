@@ -7,6 +7,7 @@
 //
 
 #import "MainScene.h"
+#import <AudioToolbox/AudioToolbox.h>
 #define ARC4RANDOM_MAX 0x100000000
 
 @implementation MainScene
@@ -60,10 +61,35 @@
     BOOL _allowGesture;
     float _beatLength;
     BOOL _percentageAlreadySubtracted;
+    
+    float _soundTicker;
+    NSURL *_lowBeat;
+    NSURL *_medBeat;
+    NSURL *_highBeat;
+    NSURL *_leftBeat;
+    NSURL *_rightBeat;
+    NSURL *_upBeat;
+    NSURL *_downBeat;
 }
 
 -(void) didLoadFromCCB
 {
+    _lowBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_bfxr" ofType:@"wav"]];
+    _medBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_high" ofType:@"wav"]];
+    _highBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_higher" ofType:@"wav"]];
+    _leftBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"left_bfxr" ofType:@"wav"]];
+    _rightBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"right_bfxr" ofType:@"wav"]];
+    _upBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"uppercut_bfxr" ofType:@"wav"]];
+    _downBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"headbash_bfxr" ofType:@"wav"]];
+    
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_lowBeat, &lowBeatSoundID);
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_medBeat, &medBeatSoundID);
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_highBeat, &highBeatSoundID);
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_leftBeat, &leftBeatSoundID);
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_rightBeat, &rightBeatSoundID);
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_upBeat, &upBeatSoundID);
+    AudioServicesCreateSystemSoundID((__bridge CFURLRef)_downBeat, &downBeatSoundID);
+    
     self.userInteractionEnabled = FALSE;
     _gestureMessage.string = @"";
     _defaults = [NSUserDefaults standardUserDefaults];
@@ -79,6 +105,7 @@
     _currentGestureSet = nil;
     _currentGestureSetIndex = 0;
     _totalPoints = 0;
+    _soundTicker = 0;
 
     _gestureTimeStamp = 0;
     _gestureRecognized = FALSE;
@@ -154,11 +181,22 @@
     _timer.currentTime += delta;
     _gestureTimeStamp += delta;
     _timer.comboTimeKeeper += delta;
+    _soundTicker += delta;
+    
     
     if (!_gameStarted)
     {
         if (_gameCountdownMode)
         {
+            if (_soundTicker >= _beatLength)
+            {
+                AudioServicesPlaySystemSound(lowBeatSoundID);
+            }
+            if (_soundTicker < _beatLength && _soundTicker >= 2 * _beatLength)
+            {
+                AudioServicesPlaySystemSound(highBeatSoundID);
+            }
+            
             if (_timer.currentTime >= 2*_beatLength)
             {
                 if (_gameCountdown == 0)
@@ -184,6 +222,7 @@
             _timer.comboTimeKeeper = 0;
             
         }
+        
         if (_currentNumOfBeats >= _waveNumOfBeats)
         {
             [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
@@ -207,6 +246,7 @@
             if ([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"]&& (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
+                AudioServicesPlaySystemSound(medBeatSoundID);
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
@@ -255,6 +295,7 @@
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
+                AudioServicesPlaySystemSound(medBeatSoundID);
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
@@ -301,6 +342,7 @@
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
+                AudioServicesPlaySystemSound(medBeatSoundID);
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
@@ -347,6 +389,7 @@
             if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
+                AudioServicesPlaySystemSound(medBeatSoundID);
                 _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
@@ -405,6 +448,7 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitLeft];
+        AudioServicesPlaySystemSound(leftBeatSoundID);
         [self loadParticleExplosionWithParticleName:@"Spit" onObject:_face withDirection:@"Left"];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"LeftSlap"])
@@ -449,6 +493,7 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitRight];
+        AudioServicesPlaySystemSound(rightBeatSoundID);
         [self loadParticleExplosionWithParticleName:@"Spit" onObject:_face withDirection:@"Right"];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"RightSlap"])
@@ -494,6 +539,7 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitUp];
+        AudioServicesPlaySystemSound(upBeatSoundID);
         [self loadParticleExplosionWithParticleName:@"Stars" onObject:_face];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"UpSlap"])
@@ -540,6 +586,7 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitDown];
+        AudioServicesPlaySystemSound(downBeatSoundID);
         [self loadParticleExplosionWithParticleName:@"Stars" onObject:_face];
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"DownSlap"])
@@ -586,18 +633,18 @@
     _comboBar.currentSize += percent;
     if (percent < 0)
     {
-        
+        AudioServicesPlaySystemSound(lowBeatSoundID);
         if (_comboMode)
         {
-            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(_comboBar.comboSize.contentSize.width, _comboBar.contentSize.height*.5) withColor:[CCColor whiteColor]];
+            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(1, .5) withColor:[CCColor whiteColor]];
         }
         else if (_comboBar.currentSize <33)
         {
-            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(_comboBar.comboSize.contentSize.width, _comboBar.contentSize.height*.5) withColor:[CCColor redColor]];
+            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(1, .5) withColor:[CCColor redColor]];
         }
         else
         {
-            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(_comboBar.comboSize.contentSize.width, _comboBar.contentSize.height*.5) withColor:[CCColor cyanColor]];
+            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(1, .5) withColor:[CCColor cyanColor]];
         }
     }
     
@@ -630,12 +677,13 @@
         
         //put in information about
         _gestureMessage.string = @"";
+        _totalScoreLabel.string = @"";
     
         id move = [CCActionMoveTo actionWithDuration:2 position:ccp(.5, -50)];
         id moveElastic = [CCActionEaseElasticInOut actionWithAction: move period:.3];
         [_comboBar runAction: moveElastic];
         
-        id jump1 = [CCActionJumpTo actionWithDuration:2 position: ccp(.3, -2) height:10 jumps:1];
+        id jump1 = [CCActionJumpTo actionWithDuration:2 position: ccp(.3, -2) height:5 jumps:1];
         [_face runAction:jump1];
         
         [self performSelector:@selector(endGame) withObject:nil afterDelay:2];
@@ -706,7 +754,7 @@
 {
     @synchronized(self)
     {
-        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/@%Particle", particleName]];
+        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle", particleName]];
         explosion.autoRemoveOnFinish = TRUE;
         explosion.position = object.position;
         [_face addChild: explosion];

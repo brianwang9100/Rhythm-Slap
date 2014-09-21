@@ -41,7 +41,7 @@
         explosion.position = position;
         explosion.startColor = color;
         explosion.endColor = color;
-        [self addChild: explosion];
+        [self.comboSize addChild: explosion];
     }
 }
 @end

@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>12</integer>
+	<integer>15</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -137,8 +137,6 @@
 						<real>1</real>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -618,7 +616,7 @@
 						<key>value</key>
 						<array>
 							<real>1</real>
-							<real>0.86666667461395264</real>
+							<real>0.0</real>
 							<real>0.0</real>
 							<real>1</real>
 						</array>
@@ -1146,7 +1144,7 @@
 				<array>
 					<dict>
 						<key>UUID</key>
-						<integer>4</integer>
+						<integer>14</integer>
 						<key>baseClass</key>
 						<string>CCBFile</string>
 						<key>children</key>
@@ -1154,7 +1152,7 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>CCBFile</string>
+						<string>Face</string>
 						<key>memberVarAssignmentName</key>
 						<string>_face</string>
 						<key>memberVarAssignmentType</key>
@@ -1205,6 +1203,8 @@
 								<string>Face.ccb</string>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>UUID</key>
@@ -1486,9 +1486,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>3.6484375</real>
+			<real>0.0</real>
 			<key>position</key>
-			<real>0.86666667461395264</real>
+			<real>6</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

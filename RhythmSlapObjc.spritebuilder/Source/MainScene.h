@@ -16,5 +16,14 @@
 
 
 @interface MainScene : CCScene
+{
+    SystemSoundID lowBeatSoundID;
+    SystemSoundID medBeatSoundID;
+    SystemSoundID highBeatSoundID;
+    SystemSoundID leftBeatSoundID;
+    SystemSoundID rightBeatSoundID;
+    SystemSoundID upBeatSoundID;
+    SystemSoundID downBeatSoundID;
+}
 
 @end

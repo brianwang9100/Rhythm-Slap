@@ -23,6 +23,7 @@
 -(void) hitLeft
 {
     self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_left.png"];
+    self.faceSprite.flipX = FALSE;
 }
 
 -(void) hitRight
