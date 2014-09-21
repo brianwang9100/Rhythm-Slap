@@ -969,6 +969,15 @@
         _gameStarted = FALSE;
         
         //put in information about
+        _gestureMessage.string = @"";
+    
+        id move = [CCActionMoveTo actionWithDuration:2 position:ccp(.5, -200)];
+        id moveElastic = [CCActionEaseElasticInOut actionWithAction: move period:.4];
+        [_comboBar runAction: moveElastic];
+        
+        id jump1 = [CCActionJumpTo actionWithDuration:2 position: _face.position height:150 jumps:2];
+        [_face runAction:jump1];
+        
         [self performSelector:@selector(endGame) withObject:nil afterDelay:2];
     }
 }
@@ -987,16 +996,13 @@
 
 -(void) endGame
 {
-    _gestureMessage.string = @"";
-    
-    id move = [CCActionMoveTo actionWithDuration:1 position:ccp(.5, -200)];
-    id moveElastic = [CCActionEaseElasticInOut actionWithAction: move period:.4];
-    [_comboBar runAction: moveElastic];
-    
+    self.userInteractionEnabled = FALSE;
     GameEndPopUp *postGamePopUp = [CCBReader load: @"PostGamePopUp"];
-    id jump1 = [CCActionJumpTo actionWithDuration:3 position:_face.position height:150 jumps:2];
-    _face.position = ccp(10,100);
-    [_face runAction:jump1];
+    postGamePopUp.userInteractionEnabled = TRUE;
+    postGamePopUp.positionType = CCPositionTypePoints;
+    postGamePopUp.position = ccp(self.contentSizeInPoints.width*.5,self.contentSizeInPoints.height * .5);
+    [self addChild:postGamePopUp];
+    
 }
 
 -(void) loadNewGesture
