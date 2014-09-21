@@ -18,7 +18,7 @@
     CCNodeGradient *_colorGradientNode;
     CCNodeColor *_glowNode;
     CCLabelTTF *_gestureMessage;
-    NSUserDefaults _defaults;
+    NSUserDefaults *_defaults;
 
     int _currentNumOfBeats;
     int _waveNumOfBeats;
@@ -182,21 +182,8 @@
         {
             _pointMultiplier++;
             _timer.comboTimeKeeper = 0;
-            _colorGradientNode.startColor = [CCColor grayColor];
-            _glowNode.visible = TRUE;
-            _comboBar.comboBarGradient.visible = TRUE;
-            _comboBar.comboGlowNode.visible = TRUE;
             
         }
-        else
-        {
-            _pointMultiplier = 1;
-            _colorGradientNode.startColor = [CCColor whiteColor];
-            _glowNode.visible = FALSE;
-            _comboBar.comboBarGradient.visible = FALSE;
-            _comboBar.comboGlowNode.visible = FALSE;
-        }
-        
         if (_currentNumOfBeats >= _waveNumOfBeats)
         {
             [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
@@ -592,10 +579,19 @@
     {
         _comboBar.currentSize = 100;
         _comboMode = TRUE;
+        _colorGradientNode.startColor = [CCColor grayColor];
+        _glowNode.visible = TRUE;
+        _comboBar.comboBarGradient.visible = TRUE;
+        _comboBar.comboGlowNode.visible = TRUE;
     }
     else
     {
         _comboMode = FALSE;
+        _pointMultiplier = 1;
+        _colorGradientNode.startColor = [CCColor whiteColor];
+        _glowNode.visible = FALSE;
+        _comboBar.comboBarGradient.visible = FALSE;
+        _comboBar.comboGlowNode.visible = FALSE;
     }
     
     if (_comboBar.currentSize <= 0)
@@ -611,7 +607,7 @@
         id moveElastic = [CCActionEaseElasticInOut actionWithAction: move period:.3];
         [_comboBar runAction: moveElastic];
         
-        id jump1 = [CCActionJumpTo actionWithDuration:2 position: ccp(.3, -2) height:50 jumps:1];
+        id jump1 = [CCActionJumpTo actionWithDuration:2 position: ccp(.3, -2) height:10 jumps:1];
         [_face runAction:jump1];
         
         [self performSelector:@selector(endGame) withObject:nil afterDelay:2];
