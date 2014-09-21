@@ -22,6 +22,9 @@
 
 -(void) didLoadFromCCB
 {
+    id fadeIn = [CCActionFadeTo actionWithDuration:1.5 opacity:1];
+    [_gameOverColor runAction:fadeIn];
+    
     _gameOverText.position = ccp(0.5, -200);
     id gameOverDropDown = [CCActionMoveTo actionWithDuration:1 position:ccp(.5, 90)];
     id gameOverElasticDown = [CCActionEaseElasticInOut actionWithAction:gameOverDropDown period:.4];
@@ -47,12 +50,12 @@
     id highNumElasticDown = [CCActionEaseElasticInOut actionWithAction:highNumDropDown period:.4];
     [_highScoreNum runAction:highNumElasticDown];
     
-    _tryAgain.position = ccp(0.5, self.contentSize.height + 200);
+    _tryAgain.position = ccp(0.5, 1500);
     id tryAgainDropDown = [CCActionMoveTo actionWithDuration:3 position:ccp(.5, 130)];
     id tryAgainElasticDown = [CCActionEaseElasticInOut actionWithAction:tryAgainDropDown period:.4];
     [_tryAgain runAction:tryAgainElasticDown];
     
-    _mainMenu.position = ccp(0.5, self.contentSize.height + 200);
+    _mainMenu.position = ccp(0.5, 1500);
     id mainMenuDropDown = [CCActionMoveTo actionWithDuration:3 position:ccp(.5, 70)];
     id mainMenuElasticDown = [CCActionEaseElasticInOut actionWithAction:mainMenuDropDown period:.4];
     [_mainMenu runAction:mainMenuElasticDown];
