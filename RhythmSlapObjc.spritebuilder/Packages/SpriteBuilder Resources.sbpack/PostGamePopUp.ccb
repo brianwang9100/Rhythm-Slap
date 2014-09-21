@@ -473,10 +473,10 @@
 								<string>Color4</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
 								</array>
 							</dict>
 							<dict>
@@ -486,7 +486,7 @@
 								<string>FloatScale</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
+									<real>10</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -721,10 +721,10 @@
 								<string>Color4</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
 								</array>
 							</dict>
 							<dict>
@@ -734,7 +734,7 @@
 								<string>FloatScale</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
+									<real>10</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -928,10 +928,10 @@
 								<string>Color4</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
 								</array>
 							</dict>
 							<dict>
@@ -941,7 +941,7 @@
 								<string>FloatScale</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
+									<real>10</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -1286,10 +1286,10 @@
 								<string>Color4</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>127</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
 								</array>
 							</dict>
 							<dict>
@@ -1299,7 +1299,7 @@
 								<string>FloatScale</string>
 								<key>value</key>
 								<array>
-									<real>2</real>
+									<real>10</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -1644,10 +1644,10 @@
 								<string>Color4</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>127</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
 								</array>
 							</dict>
 							<dict>
@@ -1657,7 +1657,7 @@
 								<string>FloatScale</string>
 								<key>value</key>
 								<array>
-									<real>2</real>
+									<real>10</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -1892,10 +1892,10 @@
 								<string>Color4</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
-									<real>0.0</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
+									<real>1</real>
 								</array>
 							</dict>
 							<dict>
@@ -1905,7 +1905,7 @@
 								<string>FloatScale</string>
 								<key>value</key>
 								<array>
-									<real>0.0</real>
+									<real>10</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -1924,6 +1924,8 @@
 								</array>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>
@@ -2017,8 +2019,6 @@
 						<real>0.0</real>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
