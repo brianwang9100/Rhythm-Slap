@@ -100,13 +100,13 @@
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)_upBeat, &upBeatSoundID);
     AudioServicesCreateSystemSoundID((__bridge CFURLRef)_downBeat, &downBeatSoundID);
     
-    AVAudioPlayer *_lowBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_lowBeat error:nil];
-    AVAudioPlayer *_medBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_medBeat error:nil];
-    AVAudioPlayer *_highBeatAudioPlayer= [[AVAudioPlayer alloc] initWithContentsOfURL:_highBeat error:nil];
-    AVAudioPlayer *_leftAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_leftBeat error:nil];
-    AVAudioPlayer *_rightAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_rightBeat error:nil];
-    AVAudioPlayer *_upAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_upBeat error:nil];
-    AVAudioPlayer *_downAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_downBeat error:nil];
+    _lowBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_lowBeat error:nil];
+    _medBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_medBeat error:nil];
+    _highBeatAudioPlayer= [[AVAudioPlayer alloc] initWithContentsOfURL:_highBeat error:nil];
+    _leftAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_leftBeat error:nil];
+    _rightAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_rightBeat error:nil];
+    _upAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_upBeat error:nil];
+    _downAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_downBeat error:nil];
     
     self.userInteractionEnabled = FALSE;
     _gestureMessage.string = @"";
@@ -202,17 +202,6 @@
     {
         if (_gameCountdownMode)
         {
-            if (_soundTicker >= _beatLength)
-            {
-                [_lowBeatAudioPlayer prepareToPlay];
-                [_lowBeatAudioPlayer play];
-            }
-            if (_soundTicker < _beatLength && _soundTicker >= 2 * _beatLength)
-            {
-                [_highBeatAudioPlayer prepareToPlay];
-                [_highBeatAudioPlayer play];
-            }
-            
             if (_timer.currentTime >= 2*_beatLength)
             {
                 if (_gameCountdown == 0)
