@@ -515,10 +515,15 @@
             
             if ((([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]) || [_currentGesture.typeOfSlapNeeded isEqual: @"PAUSE"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
-                [_face reset];
-                [_medBeatAudioPlayer prepareToPlay];
-                [_medBeatAudioPlayer play];
-                _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
+                
+                
+                if (![_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"])
+                {
+                    _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
+                    [_face reset];
+                    [_medBeatAudioPlayer prepareToPlay];
+                    [_medBeatAudioPlayer play];
+                }
                 [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
                 _currentGestureSetIndex++;
                 _currentNumOfBeats+=_currentGesture.timeStamp;
@@ -855,7 +860,7 @@
     _timer.currentTime = 0;
     _gestureTimeStamp = 0;
     _currentNumOfBeats = 0;
-    _waveNumOfBeats = 36;
+    _waveNumOfBeats = 29;
 }
 
 -(void) endGame
