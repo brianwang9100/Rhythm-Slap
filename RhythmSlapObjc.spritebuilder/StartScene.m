@@ -49,8 +49,8 @@
 -(void) swipeRight
 {
     //animate face
-    _face.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed:(@"Sprites/Face/face_right.png")];
-    [_face flipX];
+    _face.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed:(@"Sprites/Face/face_left.png")];
+    _face.faceSprite.flipX = TRUE;
     [self performSelector:@selector(startGame) withObject:nil afterDelay:2];
 }
 
