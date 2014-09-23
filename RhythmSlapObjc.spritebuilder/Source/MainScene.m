@@ -106,7 +106,7 @@
     self.userInteractionEnabled = FALSE;
     _gestureMessage.string = @"";
     _defaults = [NSUserDefaults standardUserDefaults];
-    
+   
     _timer = [Timer alloc];
     
     _gameCountdownMode = TRUE;
@@ -125,7 +125,7 @@
     _beatLength = .7;
     _percentageAlreadySubtracted = FALSE;
     
-    [self resetDefaults];
+   // [self resetDefaults];
     
     //TUTORIAL MODE
     if ([_defaults objectForKey:@"tutorial"] == nil)
