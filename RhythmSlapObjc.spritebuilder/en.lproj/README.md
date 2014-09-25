@@ -16,8 +16,12 @@ Sound effects
 
 Particle effects
 
+Tutorial
+
 ##RoadMap
 Add more sounds
+
+Fix Tutorial (way too lon needs to be more interactive)
 
 Add music
 
