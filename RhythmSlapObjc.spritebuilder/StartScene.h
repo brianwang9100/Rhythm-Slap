@@ -9,6 +9,7 @@
 #import "CCScene.h"
 #import "Hand.h"
 #import "Face.h"
+#import "AppDelegate.h"
 
 @interface StartScene : CCScene
 @end

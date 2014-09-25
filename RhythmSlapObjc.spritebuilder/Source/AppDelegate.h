@@ -25,9 +25,9 @@
 
 #import <UIKit/UIKit.h>
 #import "cocos2d.h"
+#import "MainScene.h"
+#import "StartScene.h"
 
 @interface AppController : CCAppDelegate
-{
-}
 
 @end

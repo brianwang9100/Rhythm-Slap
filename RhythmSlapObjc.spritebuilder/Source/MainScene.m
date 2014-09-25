@@ -67,22 +67,6 @@
     BOOL _percentageAlreadySubtracted;
     
     float _soundTicker;
-    AVAudioPlayer *_lowBeatAudioPlayer;
-    AVAudioPlayer *_medBeatAudioPlayer;
-    AVAudioPlayer *_highBeatAudioPlayer;
-    AVAudioPlayer *_leftAudioPlayer;
-    AVAudioPlayer *_rightAudioPlayer;
-    AVAudioPlayer *_upAudioPlayer;
-    AVAudioPlayer *_downAudioPlayer;
-    
-    NSURL *_lowBeat;
-    NSURL *_medBeat;
-    NSURL *_highBeat;
-    NSURL *_leftBeat;
-    NSURL *_rightBeat;
-    NSURL *_upBeat;
-    NSURL *_downBeat;
-    
 }
 
 -(void) didLoadFromCCB
@@ -102,6 +86,8 @@
     _rightAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_rightBeat error:nil];
     _upAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_upBeat error:nil];
     _downAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_downBeat error:nil];
+    
+    self.listOfAudioPlayers = [NSMutableArray arrayWithObjects: self.lowBeatAudioPlayer, self.medBeatAudioPlayer, self.highBeatAudioPlayer, self.leftAudioPlayer, self.rightAudioPlayer, self.upAudioPlayer, self.downAudioPlayer, nil];
     
     self.userInteractionEnabled = FALSE;
     _gestureMessage.string = @"";
@@ -175,7 +161,6 @@
                                                 [[SlapGestures alloc] initWithTime: 1 andType: @"PAUSE"] ,nil];
 
     
-    _queue = [NSMutableArray arrayWithObjects: _fourSlap, _threeSlapOneDouble, _twoDoubleOneTriple, _twoSlapOneDown,  nil];
     _queue = [NSMutableArray arrayWithObjects: _fourSlap, _threeSlapOneDouble, _twoDoubleOneTriple, _twoSlapOneDown,  nil];
     
     // listen for swipes to the left
@@ -866,7 +851,7 @@
 -(void) endGame
 {
     self.userInteractionEnabled = FALSE;
-    GameEndPopUp *postGamePopUp = [CCBReader load: @"PostGamePopUp"];
+    GameEndPopUp *postGamePopUp = (GameEndPopUp *)[CCBReader load: @"PostGamePopUp"];
     postGamePopUp.userInteractionEnabled = TRUE;
     postGamePopUp.positionType = CCPositionTypePoints;
     postGamePopUp.position = ccp(self.contentSizeInPoints.width*.5,self.contentSizeInPoints.height * .5);

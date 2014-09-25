@@ -57,9 +57,38 @@
     return YES;
 }
 
+//-(void) applicationDidEnterBackground:(UIApplication *)application
+//{
+//    if (self.mainScene != nil)
+//    {
+////        for (AVAudioPlayer *e in self.mainScene.listOfAudioPlayers)
+////        {
+////            if (e.isPlaying)
+////            {
+////                [e stop];
+////            }
+////        }
+//    }
+//}
+//
+//-(void) applicationWillTerminate:(UIApplication *)application
+//{
+//    if (self.mainScene != nil)
+//    {
+//        for (AVAudioPlayer *e in self.mainScene.listOfAudioPlayers)
+//        {
+//            if (e.isPlaying)
+//            {
+//                [e stop];
+//            }
+//        }
+//    }
+//}
+
 - (CCScene*) startScene
 {
     return [CCBReader loadAsScene:@"StartScene"];
+
 }
 
 @end
