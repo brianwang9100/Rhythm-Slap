@@ -43,6 +43,7 @@
 		DF68497719CEDA3E000413E2 /* left_bfxr.wav in Resources */ = {isa = PBXBuildFile; fileRef = DF68497019CEDA3E000413E2 /* left_bfxr.wav */; };
 		DF68497819CEDA3E000413E2 /* right_bfxr.wav in Resources */ = {isa = PBXBuildFile; fileRef = DF68497119CEDA3E000413E2 /* right_bfxr.wav */; };
 		DF68497919CEDA3E000413E2 /* uppercut_bfxr.wav in Resources */ = {isa = PBXBuildFile; fileRef = DF68497219CEDA3E000413E2 /* uppercut_bfxr.wav */; };
+		DFB4B47B19D4934500EA2337 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = DFB4B47D19D4934500EA2337 /* README.md */; };
 		DFF41F3B19CD999B000D90C8 /* StartScene.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F3A19CD999B000D90C8 /* StartScene.m */; };
 		DFF41F3E19CD99AB000D90C8 /* ComboBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F3D19CD99AB000D90C8 /* ComboBar.m */; };
 		DFF41F4119CD99B3000D90C8 /* Face.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F4019CD99B3000D90C8 /* Face.m */; };
@@ -113,6 +114,7 @@
 		DF68497019CEDA3E000413E2 /* left_bfxr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = left_bfxr.wav; sourceTree = "<group>"; };
 		DF68497119CEDA3E000413E2 /* right_bfxr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = right_bfxr.wav; sourceTree = "<group>"; };
 		DF68497219CEDA3E000413E2 /* uppercut_bfxr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = uppercut_bfxr.wav; sourceTree = "<group>"; };
+		DFB4B47C19D4934500EA2337 /* en */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = en; path = en.lproj/README.md; sourceTree = "<group>"; };
 		DFF41F3919CD999B000D90C8 /* StartScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartScene.h; sourceTree = "<group>"; };
 		DFF41F3A19CD999B000D90C8 /* StartScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartScene.m; sourceTree = "<group>"; };
 		DFF41F3C19CD99AB000D90C8 /* ComboBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComboBar.h; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 		B77F1B2517B978D7009739AE = {
 			isa = PBXGroup;
 			children = (
+				DFB4B47D19D4934500EA2337 /* README.md */,
 				B737893C1807616C0076A88C /* Source */,
 				B77F1B4617B978D7009739AE /* Resources */,
 				9222E2B918734FF800A246C7 /* libs */,
@@ -430,6 +433,7 @@
 				DFF41F4719CD99C6000D90C8 /* Hand.m in Sources */,
 				DFF41F4119CD99B3000D90C8 /* Face.m in Sources */,
 				DFF41F3B19CD999B000D90C8 /* StartScene.m in Sources */,
+				DFB4B47B19D4934500EA2337 /* README.md in Sources */,
 				DFF41F4419CD99BE000D90C8 /* Timer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -443,6 +447,17 @@
 			targetProxy = B7378988180764180076A88C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		DFB4B47D19D4934500EA2337 /* README.md */ = {
+			isa = PBXVariantGroup;
+			children = (
+				DFB4B47C19D4934500EA2337 /* en */,
+			);
+			name = README.md;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		B77F1CDC17B978D8009739AE /* Debug */ = {
