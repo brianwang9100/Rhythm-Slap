@@ -1,9 +1,10 @@
 #Rhythm-Slap
-##Brian Wang
-##Joe Wang
+Brian Wang
+
+Joe Wang
 
 ##Description
-###Using swipe gestures, slap someone to the beat and score combo points. 8-bit fun for all!
+Using swipe gestures, slap someone to the beat and score combo points. 8-bit fun for all!
 
 ##Features
 Rhythm Slapping
