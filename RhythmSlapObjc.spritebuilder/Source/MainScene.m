@@ -135,17 +135,20 @@
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"SingleSlap"],
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"SLAP!"],
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"SingleSlap"],
-                                                    [[SlapGestures alloc] initWithTime: 1 andType: @"DOUBLE SLAP!"],
-                                                    [[SlapGestures alloc] initWithTime: 1 andType: @"LeftSlap"],
+                                                    [[SlapGestures alloc] initWithTime: 1 andType: @"DOUBLE      "],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"DOUBLE SLAP!"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"LeftSlap"],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"RightSlap"],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"SLAP!"],
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"SingleSlap"], nil];
     
-    _twoDoubleOneTriple = [NSArray arrayWithObjects:[[SlapGestures alloc] initWithTime: 1 andType: @"DOUBLE SLAP!"],
-                                                    [[SlapGestures alloc] initWithTime: 1 andType: @"LeftSlap"],
-                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"RightSlap"],
+    _twoDoubleOneTriple = [NSArray arrayWithObjects:[[SlapGestures alloc] initWithTime: 1 andType: @"DOUBLE      "],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"DOUBLE SLAP!"],
-                                                    [[SlapGestures alloc] initWithTime: 1 andType: @"LeftSlap"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"LeftSlap"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"RightSlap"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"DOUBLE      "],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"DOUBLE SLAP!"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"LeftSlap"],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"RightSlap"],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"TRIPLE SLAP!"],
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"LeftSlap"],
@@ -328,7 +331,7 @@
         {
             _currentGesture = _threeSlapOneDouble[_currentGestureSetIndex];
             
-            if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
+            if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE      "]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
                 [_medBeatAudioPlayer prepareToPlay];
@@ -413,7 +416,7 @@
         {
             _currentGesture = _twoDoubleOneTriple[_currentGestureSetIndex];
             
-            if (([_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
+            if (([_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE      "]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
             {
                 [_face reset];
                 [_medBeatAudioPlayer prepareToPlay];
@@ -595,30 +598,7 @@
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"LeftSlap"])
         {
-            if (_gestureTimeStamp < 1.05 * convertedTime && _gestureTimeStamp > .95 * convertedTime)
-            {
-                _gestureMessage.string = @"PERFECT!";
-                [self setPercentage: 6 * _currentGesture.timeStamp];
-                [self addScore: 50];
-            }
-            else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
-            {
-                _gestureMessage.string = @"GOOD";
-                [self setPercentage: 4 * _currentGesture.timeStamp];
-                [self addScore: 25];
-            }
-            else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
-            {
-                _gestureMessage.string = @"OK";
-                [self setPercentage: 2 * _currentGesture.timeStamp];
-                [self addScore: 10];
-            }
-            else if (_gestureTimeStamp <= .8 * convertedTime)
-            {
-                _gestureMessage.string = @"TOO EARLY!";
-                [self setPercentage: -6 * _currentGesture.timeStamp];
-                [self addScore: -25];
-            }
+            [self checkForAccuracy:convertedTime];
         }
         else
         {
@@ -640,30 +620,7 @@
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"RightSlap"])
         {
-            if (_gestureTimeStamp < 1.05 * convertedTime && _gestureTimeStamp > .95 * convertedTime)
-            {
-                _gestureMessage.string = @"PERFECT!";
-                [self setPercentage: 6 * _currentGesture.timeStamp];
-                [self addScore: 50];
-            }
-            else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
-            {
-                _gestureMessage.string = @"GOOD";
-                [self setPercentage: 4 * _currentGesture.timeStamp];
-                [self addScore: 25];
-            }
-            else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
-            {
-                _gestureMessage.string = @"OK";
-                [self setPercentage: 2 * _currentGesture.timeStamp];
-                [self addScore: 10];
-            }
-            else if (_gestureTimeStamp <= .8 * convertedTime)
-            {
-                _gestureMessage.string = @"TOO EARLY!";
-                [self setPercentage: -6 * _currentGesture.timeStamp];
-                [self addScore: -25];
-            }
+            [self checkForAccuracy:convertedTime];
             
         }
         else
@@ -686,31 +643,7 @@
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"UpSlap"])
         {
-            if (_gestureTimeStamp < 1.05 * convertedTime && _gestureTimeStamp > .95 * convertedTime)
-            {
-                _gestureMessage.string = @"PERFECT!";
-                [self setPercentage: 6 * _currentGesture.timeStamp];
-                [self addScore: 50];
-            }
-            else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
-            {
-                _gestureMessage.string = @"GOOD";
-                [self setPercentage: 4 * _currentGesture.timeStamp];
-                [self addScore: 25];
-            }
-            else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
-            {
-                _gestureMessage.string = @"OK";
-                [self setPercentage: 2 * _currentGesture.timeStamp];
-                [self addScore: 10];
-            }
-            else if (_gestureTimeStamp <= .8 * convertedTime)
-            {
-                _gestureMessage.string = @"TOO EARLY!";
-                [self setPercentage: -6 * _currentGesture.timeStamp];
-                [self addScore: -25];
-            }
-            
+            [self checkForAccuracy:convertedTime];
         }
         else
         {
@@ -733,31 +666,7 @@
         float convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"DownSlap"])
         {
-            if (_gestureTimeStamp < 1.05 * convertedTime && _gestureTimeStamp > .95 * convertedTime)
-            {
-                _gestureMessage.string = @"PERFECT!";
-                [self setPercentage: 6 * _currentGesture.timeStamp];
-                [self addScore: 50];
-            }
-            else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
-            {
-                _gestureMessage.string = @"GOOD";
-                [self setPercentage: 4 * _currentGesture.timeStamp];
-                [self addScore: 25];
-            }
-            else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
-            {
-                _gestureMessage.string = @"OK";
-                [self setPercentage: 2 * _currentGesture.timeStamp];
-                [self addScore: 10];
-            }
-            else if (_gestureTimeStamp <= .8 * convertedTime)
-            {
-                _gestureMessage.string = @"TOO EARLY!";
-                [self setPercentage: -6 * _currentGesture.timeStamp];
-                [self addScore: -25];
-            }
-            
+            [self checkForAccuracy:convertedTime];
         }
         else
         {
@@ -768,6 +677,35 @@
         _gestureRecognized = TRUE;
         _allowGesture = FALSE;
     }
+}
+
+-(void) checkForAccuracy: (float) convertedTime
+{
+    if (_gestureTimeStamp < 1.05 * convertedTime && _gestureTimeStamp > .95 * convertedTime)
+    {
+        _gestureMessage.string = @"PERFECT!";
+        [self setPercentage: 6 * _currentGesture.timeStamp];
+        [self addScore: 50];
+    }
+    else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
+    {
+        _gestureMessage.string = @"GOOD";
+        [self setPercentage: 4 * _currentGesture.timeStamp];
+        [self addScore: 25];
+    }
+    else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
+    {
+        _gestureMessage.string = @"OK";
+        [self setPercentage: 2 * _currentGesture.timeStamp];
+        [self addScore: 10];
+    }
+    else if (_gestureTimeStamp <= .8 * convertedTime)
+    {
+        _gestureMessage.string = @"TOO EARLY!";
+        [self setPercentage: -6 * _currentGesture.timeStamp];
+        [self addScore: -25];
+    }
+
 }
 
 -(void) setPercentage: (int) percent
