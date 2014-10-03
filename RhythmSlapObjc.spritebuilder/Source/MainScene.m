@@ -23,7 +23,7 @@
     CCLabelTTF *_comboModeLabel;
     NSUserDefaults *_defaults;
 
-    int _currentNumOfBeats;
+    float _currentNumOfBeats;
     int _waveNumOfBeats;
    
     int _pointMultiplier;
@@ -110,16 +110,6 @@
     _gestureRecognized = FALSE;
     _beatLength = .7;
     _percentageAlreadySubtracted = FALSE;
-    
-   // [self resetDefaults];
-    
-    //TUTORIAL MODE
-    if ([_defaults objectForKey:@"tutorial"] == nil)
-    {
-        _tutorialMode = TRUE;
-        [_defaults setBool: TRUE forKey:@"tutorial"];
-        [_defaults synchronize];
-    }
     
     
     _fourSlap = [NSArray arrayWithObjects:  [[SlapGestures alloc] initWithTime: 1 andType: @"SLAP!"],
@@ -219,10 +209,6 @@
     }
     else if (!_gameEnded)
     {
-        if (_tutorialMode)
-        {
-            _tutorialLabel.visible = TRUE;
-        }
         
         if (_comboMode && _timer.comboTimeKeeper >= _beatLength)
         {
@@ -235,18 +221,7 @@
         {
             
             [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
-            if (_tutorialMode)
-            {
-                _beatLength = .7;
-                _tutorialMode = FALSE;
-                _tutorialLabel.visible = FALSE;
-                _queue = nil;
-                _queue = [NSMutableArray arrayWithObjects: _fourSlap, _threeSlapOneDouble, _twoDoubleOneTriple, _twoSlapOneDown,  nil];
-            }
-            else
-            {
-                _beatLength -= .05;
-            }
+            _beatLength -= .05;
             
             _gestureRecognized = TRUE;
             _allowGesture = FALSE;
@@ -258,318 +233,64 @@
             _gestureTimeStamp = 0;
         }
         
-        if (_currentGestureSet ==_fourSlap)
+        _currentGesture = _currentGestureSet[_currentGestureSetIndex];
+        
+        if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE      "] || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"] | [_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"])&& (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
         {
-            _currentGesture = _fourSlap[_currentGestureSetIndex];
-            
-            if ([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"]&& (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
+            if (![_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"])
             {
+                _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
                 [_face reset];
+                //SECOND DOUBLE SLAP ISN'T PLAYING
+                if ([_medBeatAudioPlayer isPlaying])
+                {
+                    [_medBeatAudioPlayer stop];
+                }
                 [_medBeatAudioPlayer prepareToPlay];
                 [_medBeatAudioPlayer play];
-                _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
-                [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
-                _currentGestureSetIndex++;
-                _currentNumOfBeats+=_currentGesture.timeStamp;
+            }
             
-                _timer.currentTime = 0;
-                _gestureTimeStamp = 0;
-            }
-            else
-            {
-                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength && !_tutorialMode)
-                {
-                    _gestureTimeStamp = .2*_beatLength;
-                    _timer.currentTime = .2*_beatLength;
-                    _currentGestureSetIndex++;
-                    
-                    _gestureMessage.string = @"TOO LATE!";
-                    [self setPercentage: -6* _currentGesture.timeStamp];
-                    
-                    _gestureRecognized = FALSE;
-                    _allowGesture = TRUE;
-                    _currentNumOfBeats +=_currentGesture.timeStamp;
-                }
-                else if ((_gestureRecognized ||_tutorialMode) && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
-                {
-                    _gestureTimeStamp = 0;
-                    _timer.currentTime = 0;
-                    
-                    
-                    _gestureRecognized = FALSE;
-                    _allowGesture = TRUE;
-                    _currentNumOfBeats +=_currentGesture.timeStamp;
-                    
-                    if (_tutorialMode)
-                    {
-                        if (_currentGestureSetIndex == 1 || _currentGestureSetIndex == 5)
-                        {
-                            [_face hitLeft];
-                            [_leftAudioPlayer play];
-                            _gestureMessage.string = @"Swipe Left!";
-                            _tutorialLabel.string = @"Swipe left or right to the \nbeat in response to SLAP!";
-                            
-                        }
-                        if (_currentGestureSetIndex == 3 || _currentGestureSetIndex == 7)
-                        {
-                            [_face hitRight];
-                            [_rightAudioPlayer play];
-                            _gestureMessage.string = @"Or Right!";
-                        }
-                    }
-                    _currentGestureSetIndex++;
-                }
-                
-                if (_currentGestureSetIndex >= [_fourSlap count])
-                {
-                    [self loadNewGesture];
-                }
-            }
-    
+            [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
+            _currentGestureSetIndex++;
+            _currentNumOfBeats+=_currentGesture.timeStamp;
+            _timer.currentTime = 0;
+            _gestureTimeStamp = 0;
         }
-        else if (_currentGestureSet == _threeSlapOneDouble)
+        else
         {
-            _currentGesture = _threeSlapOneDouble[_currentGestureSetIndex];
-            
-            if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE      "]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
+            if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength)
             {
-                [_face reset];
-                [_medBeatAudioPlayer prepareToPlay];
-                [_medBeatAudioPlayer play];
-                _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
-                [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
+                _gestureTimeStamp = .2*_beatLength;
+                _timer.currentTime = .2*_beatLength;
                 _currentGestureSetIndex++;
-                _currentNumOfBeats+=_currentGesture.timeStamp;
-                _timer.currentTime = 0;
-                _gestureTimeStamp = 0;
+                _currentNumOfBeats +=_currentGesture.timeStamp;
+                _gestureRecognized = FALSE;
+                _allowGesture = TRUE;
+                
+                _gestureMessage.string = @"TOO LATE!";
+                [self setPercentage: -6* _currentGesture.timeStamp];
+                
+
             }
-            else
+            else if (_gestureRecognized && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
             {
-                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength && !_tutorialMode)
-                {
-                    _gestureTimeStamp = .2 * _beatLength;
-                    _timer.currentTime = .2 * _beatLength;
-                    _currentGestureSetIndex++;
-                    
-                    _gestureMessage.string = @"TOO LATE!";
-                    [self setPercentage: -6 * _currentGesture.timeStamp];
-                    
-                    _gestureRecognized = FALSE;
-                    _allowGesture = TRUE;
-                    _currentNumOfBeats +=_currentGesture.timeStamp;
-                }
-                else if ((_gestureRecognized || _tutorialMode) && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
-                {
-                    _gestureTimeStamp = 0;
-                    _timer.currentTime = 0;
-                    
-                    _gestureRecognized = FALSE;
-                    _allowGesture = TRUE;
-                    _currentNumOfBeats +=_currentGesture.timeStamp;
-                    
-                    if (_tutorialMode)
-                    {
-                        if (_currentGestureSetIndex == 1)
-                        {
-                            [_face hitLeft];
-                            [_leftAudioPlayer play];
-                            _gestureMessage.string = @"Swipe Left!";
-                            _tutorialLabel.string = @" ";
-                            
-                        }
-                        if (_currentGestureSetIndex == 3)
-                        {
-                            [_face hitRight];
-                            [_rightAudioPlayer play];
-                            _gestureMessage.string = @"Or Right!";
-                        }
-                        if (_currentGestureSetIndex == 5)
-                        {
-                            [_face hitLeft];
-                            [_leftAudioPlayer play];
-                            _gestureMessage.string = @"First Left,";
-                            _tutorialLabel.string = @"Swipe Left then Right in \nresponse to DOUBLE SLAPS!";
-                        }
-                        if (_currentGestureSetIndex == 6)
-                        {
-                            [_face hitRight];
-                            [_rightAudioPlayer play];
-                            _gestureMessage.string = @"Then Right!";
-                        }
-                        if (_currentGestureSetIndex == 9)
-                        {
-                            [_face hitRight];
-                            [_rightAudioPlayer play];
-                            _gestureMessage.string = @"";
-                        }
-                    }
-                    
-                    _currentGestureSetIndex++;
-                }
-                if (_currentGestureSetIndex >= [_threeSlapOneDouble count])
-                {
-                    [self loadNewGesture];
-                }
+                _gestureTimeStamp = 0;
+                _timer.currentTime = 0;
+                _currentNumOfBeats +=_currentGesture.timeStamp;
+                _currentGestureSetIndex++;
+                _gestureRecognized = FALSE;
+                _allowGesture = TRUE;
+                
             }
         }
-        else if (_currentGestureSet == _twoDoubleOneTriple)
+        
+        if (_currentGestureSetIndex >= [_currentGestureSet count])
         {
-            _currentGesture = _twoDoubleOneTriple[_currentGestureSetIndex];
-            
-            if (([_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE      "]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
-            {
-                [_face reset];
-                [_medBeatAudioPlayer prepareToPlay];
-                [_medBeatAudioPlayer play];
-                _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
-                [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
-                _currentGestureSetIndex++;
-                _currentNumOfBeats+=_currentGesture.timeStamp;
-                _timer.currentTime = 0;
-                _gestureTimeStamp = 0;
-            }
-            else
-            {
-                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength && !_tutorialMode)
-                {
-                    _gestureTimeStamp = .2*_beatLength;
-                    _timer.currentTime = .2*_beatLength;
-                    _currentGestureSetIndex++;
-                    
-                    _gestureMessage.string = @"TOO LATE!";
-                    [self setPercentage: -6* _currentGesture.timeStamp];
-                    
-                    _gestureRecognized = FALSE;
-                    _allowGesture = TRUE;
-                    _currentNumOfBeats +=_currentGesture.timeStamp;
-                }
-                else if ((_gestureRecognized || _tutorialMode) && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
-                {
-                    _gestureTimeStamp = 0;
-                    _timer.currentTime = 0;
-                    
-                    
-                    _gestureRecognized = FALSE;
-                    _allowGesture = TRUE;
-                    _currentNumOfBeats +=_currentGesture.timeStamp;
-                    if (_tutorialMode)
-                    {
-                        if (_currentGestureSetIndex == 1 || _currentGestureSetIndex == 4)
-                        {
-                            [_face hitLeft];
-                            [_leftAudioPlayer play];
-                            _gestureMessage.string = @"Swipe Left!";
-                            
-                            
-                        }
-                        if (_currentGestureSetIndex == 2 || _currentGestureSetIndex == 5)
-                        {
-                            [_face hitRight];
-                            [_rightAudioPlayer play];
-                            _gestureMessage.string = @"Then Right!";
-                        }
-                        if (_currentGestureSetIndex == 7)
-                        {
-                            [_face hitLeft];
-                            [_leftAudioPlayer play];
-                            _gestureMessage.string = @"1. Left!";
-                            _tutorialLabel.string = @"Remember Left, Right, \nand Up for TRIPLE SLAPS!";
-                        }
-                        if (_currentGestureSetIndex == 8)
-                        {
-                            [_face hitRight];
-                            [_rightAudioPlayer play];
-                            _gestureMessage.string = @"2. Right!";
-                        }
-                        if (_currentGestureSetIndex == 9)
-                        {
-                            [_face hitUp];
-                            [_upAudioPlayer play];
-                            _gestureMessage.string = @"3. UPPERCUT!";
-                        }
-                    }
-                    _currentGestureSetIndex++;
-                }
-                
-                if (_currentGestureSetIndex >= [_twoDoubleOneTriple count])
-                {
-                    [self loadNewGesture];
-                }
-            }
-        }
-        else if (_currentGestureSet == _twoSlapOneDown)
-        {
-            _currentGesture = _twoSlapOneDown[_currentGestureSetIndex];
-            
-            if ((([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]) || [_currentGesture.typeOfSlapNeeded isEqual: @"PAUSE"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
-            {
-                
-                
-                if (![_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"])
-                {
-                    _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
-                    [_face reset];
-                    [_medBeatAudioPlayer prepareToPlay];
-                    [_medBeatAudioPlayer play];
-                }
-                [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
-                _currentGestureSetIndex++;
-                _currentNumOfBeats+=_currentGesture.timeStamp;
-                _timer.currentTime = 0;
-                _gestureTimeStamp = 0;
-            }
-            else
-            {
-                if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength && !_tutorialMode)
-                {
-                    _gestureTimeStamp = .2 * _beatLength;
-                    _timer.currentTime = .2 * _beatLength;
-                    _currentGestureSetIndex ++;
-                    
-                    _gestureMessage.string = @"TOO LATE!";
-                    [self setPercentage: -6 * _currentGesture.timeStamp];
-                    
-                    _gestureRecognized = FALSE;
-                    _allowGesture = TRUE;
-                    _currentNumOfBeats +=_currentGesture.timeStamp;
-                }
-                else if ((_gestureRecognized || _tutorialMode) && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
-                {
-                    _gestureTimeStamp = 0;
-                    _timer.currentTime = 0;
-                    
-                    
-                    _gestureRecognized = FALSE;
-                    _allowGesture = TRUE;
-                    _currentNumOfBeats +=_currentGesture.timeStamp;
-                    
-                    if (_tutorialMode)
-                    {
-                        if (_currentGestureSetIndex == 1 || _currentGestureSetIndex == 3)
-                        {
-                            [_face hitLeft];
-                            [_leftAudioPlayer play];
-                            _gestureMessage.string = @"Swipin and Swipin...";
-                            _tutorialLabel.string = @"Final Slap is the HEAD BASH!";
-                        }
-                        if (_currentGestureSetIndex == 5)
-                        {
-                            [_face hitDown];
-                            [_downAudioPlayer play];
-                            _tutorialLabel.string = @"Wait for it...\nTHEN SLAP";
-                        }
-                    }
-                    _currentGestureSetIndex++;
-                }
-            }
-            if (_currentGestureSetIndex >= [_twoSlapOneDown count])
-            {
-                [self loadNewGesture];
-            }
+            [self loadNewGesture];
         }
     }
 }
-    
+
 -(void) delayWaveMessage
 {
     if (_tutorialMode)
@@ -590,7 +311,7 @@
 
 -(void) swipeLeft
 {
-    if (!_gestureRecognized && _allowGesture && !_tutorialMode)
+    if (!_gestureRecognized && _allowGesture)
     {
         [_face hitLeft];
         [_leftAudioPlayer prepareToPlay];
@@ -612,7 +333,7 @@
 }
 -(void) swipeRight
 {
-    if (!_gestureRecognized && _allowGesture && !_tutorialMode)
+    if (!_gestureRecognized && _allowGesture)
     {
         [_face hitRight];
         [_rightAudioPlayer prepareToPlay];
@@ -635,7 +356,7 @@
 }
 -(void) swipeUp
 {
-    if (!_gestureRecognized && _allowGesture && !_tutorialMode)
+    if (!_gestureRecognized && _allowGesture)
     {
         [_face hitUp];
         [_upAudioPlayer prepareToPlay];
@@ -658,7 +379,7 @@
 
 -(void) swipeDown
 {
-    if (!_gestureRecognized && _allowGesture && !_tutorialMode)
+    if (!_gestureRecognized && _allowGesture)
     {
         [_face hitDown];
         [_downAudioPlayer prepareToPlay];
@@ -783,7 +504,7 @@
     _timer.currentTime = 0;
     _gestureTimeStamp = 0;
     _currentNumOfBeats = 0;
-    _waveNumOfBeats = 29;
+    _waveNumOfBeats = 32;
 }
 
 -(void) endGame
@@ -809,6 +530,7 @@
 -(void) loadNewGesture
 {
     [_queue removeObjectAtIndex: 0];
+    _currentGestureSet = nil;
     NSArray *generatedGesture = nil;
     switch (arc4random()%3)
     {
