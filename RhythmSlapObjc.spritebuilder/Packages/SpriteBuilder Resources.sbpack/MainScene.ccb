@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>19</integer>
+	<integer>20</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -1268,7 +1268,7 @@
 						<string>FloatScale</string>
 						<key>value</key>
 						<array>
-							<real>100</real>
+							<real>35</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -1307,7 +1307,7 @@
 						<string>Size</string>
 						<key>value</key>
 						<array>
-							<real>0.89999997615814209</real>
+							<real>0.80000001192092896</real>
 							<real>0.20000000298023224</real>
 							<integer>2</integer>
 							<integer>2</integer>
@@ -1352,7 +1352,7 @@
 							<real>0.0</real>
 							<real>0.0</real>
 							<real>0.0</real>
-							<real>0.0</real>
+							<real>1</real>
 						</array>
 					</dict>
 					<dict>
@@ -1362,7 +1362,7 @@
 						<string>FloatScale</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
+							<real>1.5</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -1405,6 +1405,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 				<key>seqExpanded</key>
 				<true/>
 			</dict>
@@ -1697,8 +1699,6 @@
 						<string>ComboBar.ccb</string>
 					</dict>
 				</array>
-				<key>selected</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -1789,7 +1789,7 @@
 						<string>FloatScale</string>
 						<key>value</key>
 						<array>
-							<real>50</real>
+							<real>39</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -1800,19 +1800,6 @@
 						<string>Check</string>
 						<key>value</key>
 						<true/>
-					</dict>
-					<dict>
-						<key>name</key>
-						<string>color</string>
-						<key>type</key>
-						<string>Color3</string>
-						<key>value</key>
-						<array>
-							<real>0.0</real>
-							<real>0.0</real>
-							<real>0.0</real>
-							<real>1</real>
-						</array>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -1866,7 +1853,7 @@
 							<real>0.0</real>
 							<real>0.0</real>
 							<real>0.0</real>
-							<real>0.0</real>
+							<real>1</real>
 						</array>
 					</dict>
 					<dict>
@@ -1876,8 +1863,8 @@
 						<string>FloatScale</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
-							<integer>0</integer>
+							<real>2</real>
+							<integer>1</integer>
 						</array>
 					</dict>
 					<dict>
@@ -2023,19 +2010,6 @@
 					</dict>
 					<dict>
 						<key>name</key>
-						<string>color</string>
-						<key>type</key>
-						<string>Color3</string>
-						<key>value</key>
-						<array>
-							<real>0.0</real>
-							<real>0.0</real>
-							<real>0.0</real>
-							<real>1</real>
-						</array>
-					</dict>
-					<dict>
-						<key>name</key>
 						<string>dimensions</string>
 						<key>type</key>
 						<string>Size</string>
@@ -2086,7 +2060,7 @@
 							<real>0.0</real>
 							<real>0.0</real>
 							<real>0.0</real>
-							<real>0.0</real>
+							<real>1</real>
 						</array>
 					</dict>
 					<dict>
@@ -2348,6 +2322,68 @@
 							<false/>
 							<integer>0</integer>
 						</array>
+					</dict>
+				</array>
+			</dict>
+			<dict>
+				<key>UUID</key>
+				<integer>19</integer>
+				<key>baseClass</key>
+				<string>CCBFile</string>
+				<key>children</key>
+				<array/>
+				<key>customClass</key>
+				<string></string>
+				<key>displayName</key>
+				<string>CCBFile</string>
+				<key>memberVarAssignmentName</key>
+				<string>_beatBorder</string>
+				<key>memberVarAssignmentType</key>
+				<integer>1</integer>
+				<key>properties</key>
+				<array>
+					<dict>
+						<key>name</key>
+						<string>name</string>
+						<key>type</key>
+						<string>StringSimple</string>
+						<key>value</key>
+						<string></string>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>position</string>
+						<key>type</key>
+						<string>Position</string>
+						<key>value</key>
+						<array>
+							<real>0.5</real>
+							<real>0.5</real>
+							<integer>0</integer>
+							<integer>2</integer>
+							<integer>2</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>scale</string>
+						<key>type</key>
+						<string>ScaleLock</string>
+						<key>value</key>
+						<array>
+							<real>1</real>
+							<real>1</real>
+							<false/>
+							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>ccbFile</string>
+						<key>type</key>
+						<string>CCBFile</string>
+						<key>value</key>
+						<string>BeatBorder.ccb</string>
 					</dict>
 				</array>
 			</dict>

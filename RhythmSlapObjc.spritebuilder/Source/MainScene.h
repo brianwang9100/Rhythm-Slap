@@ -13,6 +13,7 @@
 #import "GameEndPopUp.h"
 #import "Timer.h"
 #import "SlapGestures.h"
+#import "BeatBorder.h"
 
 
 @interface MainScene : CCScene

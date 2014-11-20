@@ -61,12 +61,15 @@
     UISwipeGestureRecognizer *_swipeDown;
     
     float _gestureTimeStamp;
+    float _soundAndBorderTimeStamp;
     BOOL _gestureRecognized;
     BOOL _allowGesture;
     float _beatLength;
     BOOL _percentageAlreadySubtracted;
     
     float _soundTicker;
+    
+    BeatBorder *_beatBorder;
 }
 
 -(void) didLoadFromCCB
@@ -107,8 +110,10 @@
     _soundTicker = 0;
 
     _gestureTimeStamp = 0;
+    _soundAndBorderTimeStamp = 0;
     _gestureRecognized = FALSE;
     _beatLength = .7;
+    _beatBorder.beatLength = _beatLength;
     _percentageAlreadySubtracted = FALSE;
     
     
@@ -180,12 +185,24 @@
     _gestureTimeStamp += delta;
     _timer.comboTimeKeeper += delta;
     _soundTicker += delta;
+    _soundAndBorderTimeStamp += delta;
     
     
     if (!_gameStarted)
     {
         if (_gameCountdownMode)
         {
+            if (_soundAndBorderTimeStamp >= _beatLength && _gameCountdown < 4) {
+                [self beat];
+                if ([_medBeatAudioPlayer isPlaying])
+                {
+                    [_medBeatAudioPlayer stop];
+                }
+                [_medBeatAudioPlayer prepareToPlay];
+                [_medBeatAudioPlayer play];
+                
+                _soundAndBorderTimeStamp = 0;
+            }
             if (_timer.currentTime >= 2*_beatLength)
             {
                 if (_gameCountdown == 0)
@@ -196,6 +213,7 @@
                 }
                 else if (_gameCountdown == 4)
                 {
+
                     _gestureMessage.string = @"SLAP TO THE BEAT!";
                 }
                 else if (_gameCountdown < 4 && _gameCountdown > 0)
@@ -209,7 +227,6 @@
     }
     else if (!_gameEnded)
     {
-        
         if (_comboMode && _timer.comboTimeKeeper >= _beatLength)
         {
             _pointMultiplier++;
@@ -217,11 +234,17 @@
             _comboModeLabel.string = [NSString stringWithFormat:@"COMBO MODE x%i", _pointMultiplier];
         }
         
+        if (_soundAndBorderTimeStamp >= _beatLength) {
+            [self beat];
+            _soundAndBorderTimeStamp = 0;
+        }
+        
         if (_currentNumOfBeats >= _waveNumOfBeats)
         {
             
             [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
             _beatLength -= .05;
+            _beatBorder.beatLength = _beatLength;
             
             _gestureRecognized = TRUE;
             _allowGesture = FALSE;
@@ -235,7 +258,12 @@
         
         _currentGesture = _currentGestureSet[_currentGestureSetIndex];
         
-        if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"] || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE      "] || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"] | [_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"])&& (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
+        if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"]
+             || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"]
+             || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"]
+             || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE      "]
+             || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]
+             || [_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
         {
             if (![_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"])
             {
@@ -258,7 +286,7 @@
         }
         else
         {
-            if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp + .2) * _beatLength)
+            if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp * 1.2) * _beatLength)
             {
                 _gestureTimeStamp = .2*_beatLength;
                 _timer.currentTime = .2*_beatLength;
@@ -280,7 +308,6 @@
                 _currentGestureSetIndex++;
                 _gestureRecognized = FALSE;
                 _allowGesture = TRUE;
-                
             }
         }
         
@@ -459,8 +486,6 @@
         _comboBar.comboBarGradient.visible = TRUE;
         _comboBar.comboGlowNode.visible = TRUE;
         _comboModeLabel.visible = TRUE;
-        _totalScoreLabel.color = [CCColor whiteColor];
-        _gestureMessage.color = [CCColor whiteColor];
     }
     else
     {
@@ -471,8 +496,6 @@
         _comboBar.comboBarGradient.visible = FALSE;
         _comboBar.comboGlowNode.visible = FALSE;
         _comboModeLabel.visible = FALSE;
-        _totalScoreLabel.color = [CCColor blackColor];
-        _gestureMessage.color = [CCColor blackColor];
     }
     
     if (_comboBar.currentSize <= 0)
@@ -504,7 +527,17 @@
     _timer.currentTime = 0;
     _gestureTimeStamp = 0;
     _currentNumOfBeats = 0;
+    _soundAndBorderTimeStamp = 0;
     _waveNumOfBeats = 32;
+    if ([_medBeatAudioPlayer isPlaying])
+    {
+        [_medBeatAudioPlayer stop];
+    }
+    [_medBeatAudioPlayer prepareToPlay];
+    [_medBeatAudioPlayer play];
+    
+//    [_medBeatAudioPlayer performSelector:@selector(prepareToPlay) withObject:nil afterDelay:_beatLength];
+//    [_medBeatAudioPlayer performSelector:@selector(play) withObject:nil afterDelay:_beatLength];
 }
 
 -(void) endGame
@@ -532,7 +565,7 @@
     [_queue removeObjectAtIndex: 0];
     _currentGestureSet = nil;
     NSArray *generatedGesture = nil;
-    switch (arc4random()%3)
+    switch (arc4random()%4)
     {
         case 0: generatedGesture = _fourSlap;
             break;
@@ -567,5 +600,13 @@
 {
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
+}
+
+-(void) beat {
+    CCActionScaleTo *scaleIn = [CCActionScaleTo actionWithDuration:_beatLength/2 scale:.5];
+    CCActionEaseOut *popIn = [CCActionEaseOut actionWithAction:scaleIn];
+    CCActionScaleTo *scaleOut = [CCActionScaleTo actionWithDuration:_beatLength/2 scale: 1];
+    CCActionEaseIn *popOut = [CCActionEaseIn actionWithAction:scaleOut];
+    [_beatBorder runAction: [CCActionSequence actions: popIn, popOut, nil]];
 }
 @end

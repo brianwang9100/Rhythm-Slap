@@ -53,6 +53,7 @@
 		DFF41F4E19CD9B36000D90C8 /* SlapGestures.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F4D19CD9B36000D90C8 /* SlapGestures.m */; };
 		DFF41F6619CDDC67000D90C8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DFF41F6519CDDC67000D90C8 /* Images.xcassets */; };
 		DFF41F6B19CDDCE4000D90C8 /* Images-2.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DFF41F6A19CDDCE4000D90C8 /* Images-2.xcassets */; };
+		DFFBE9511A1D4B70006CB116 /* BeatBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBE9501A1D4B70006CB116 /* BeatBorder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,6 +133,8 @@
 		DFF41F6519CDDC67000D90C8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = RhythmSlapObjc/Images.xcassets; sourceTree = SOURCE_ROOT; };
 		DFF41F6819CDDCD1000D90C8 /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Images-2.xcassets"; path = "RhythmSlapObjc/Images-2.xcassets"; sourceTree = SOURCE_ROOT; };
 		DFF41F6A19CDDCE4000D90C8 /* Images-2.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Images-2.xcassets"; path = "RhythmSlapObjc/Images-2.xcassets"; sourceTree = SOURCE_ROOT; };
+		DFFBE94F1A1D4B70006CB116 /* BeatBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeatBorder.h; sourceTree = "<group>"; };
+		DFFBE9501A1D4B70006CB116 /* BeatBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BeatBorder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +176,8 @@
 				B7378993180767190076A88C /* MainScene.m */,
 				DFF41F3919CD999B000D90C8 /* StartScene.h */,
 				DFF41F3A19CD999B000D90C8 /* StartScene.m */,
+				DFFBE94F1A1D4B70006CB116 /* BeatBorder.h */,
+				DFFBE9501A1D4B70006CB116 /* BeatBorder.m */,
 				DFF41F3C19CD99AB000D90C8 /* ComboBar.h */,
 				DFF41F3D19CD99AB000D90C8 /* ComboBar.m */,
 				DFF41F3F19CD99B3000D90C8 /* Face.h */,
@@ -425,6 +430,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B737893F1807617C0076A88C /* AppDelegate.m in Sources */,
+				DFFBE9511A1D4B70006CB116 /* BeatBorder.m in Sources */,
 				B7378994180767190076A88C /* MainScene.m in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
 				DFF41F3E19CD99AB000D90C8 /* ComboBar.m in Sources */,
@@ -521,7 +527,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Brian Wang (WFG337ZWR6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -544,7 +550,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = RhythmSlapObjc;
-				PROVISIONING_PROFILE = "47b2396a-84ed-4c03-a99b-47a0611af95b";
+				PROVISIONING_PROFILE = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
@@ -559,7 +565,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: Brian Wang (WFG337ZWR6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/Prefix.pch;
@@ -580,7 +586,7 @@
 					"-ObjC",
 				);
 				PRODUCT_NAME = RhythmSlapObjc;
-				PROVISIONING_PROFILE = "47b2396a-84ed-4c03-a99b-47a0611af95b";
+				PROVISIONING_PROFILE = "";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};
