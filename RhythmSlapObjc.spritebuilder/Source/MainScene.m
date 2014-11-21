@@ -23,7 +23,7 @@
     CCLabelTTF *_comboModeLabel;
     NSUserDefaults *_defaults;
 
-    float _currentNumOfBeats;
+    double _currentNumOfBeats;
     int _waveNumOfBeats;
    
     int _pointMultiplier;
@@ -60,14 +60,14 @@
     UISwipeGestureRecognizer *_swipeUp;
     UISwipeGestureRecognizer *_swipeDown;
     
-    float _gestureTimeStamp;
-    float _soundAndBorderTimeStamp;
+    double _gestureTimeStamp;
+    double _soundAndBorderTimeStamp;
     BOOL _gestureRecognized;
     BOOL _allowGesture;
-    float _beatLength;
+    double _beatLength;
     BOOL _percentageAlreadySubtracted;
     
-    float _soundTicker;
+    double _soundTicker;
     
     BeatBorder *_beatBorder;
 }
@@ -132,19 +132,19 @@
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"SingleSlap"],
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"DOUBLE      "],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"DOUBLE SLAP!"],
-                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"LeftSlap"],
-                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"RightSlap"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"SingleSlap"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"SingleSlap"],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"SLAP!"],
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"SingleSlap"], nil];
     
     _twoDoubleOneTriple = [NSArray arrayWithObjects:[[SlapGestures alloc] initWithTime: 1 andType: @"DOUBLE      "],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"DOUBLE SLAP!"],
-                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"LeftSlap"],
-                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"RightSlap"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"SingleSlap"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"SingleSlap"],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"DOUBLE      "],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"DOUBLE SLAP!"],
-                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"LeftSlap"],
-                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"RightSlap"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"SingleSlap"],
+                                                    [[SlapGestures alloc] initWithTime: .5 andType: @"SingleSlap"],
                                                     [[SlapGestures alloc] initWithTime: .5 andType: @"TRIPLE SLAP!"],
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"LeftSlap"],
                                                     [[SlapGestures alloc] initWithTime: 1 andType: @"RightSlap"],
@@ -187,7 +187,6 @@
     _soundTicker += delta;
     _soundAndBorderTimeStamp += delta;
     
-    
     if (!_gameStarted)
     {
         if (_gameCountdownMode)
@@ -200,23 +199,21 @@
                 }
                 [_medBeatAudioPlayer prepareToPlay];
                 [_medBeatAudioPlayer play];
-                
                 _soundAndBorderTimeStamp = 0;
+                
             }
             if (_timer.currentTime >= 2*_beatLength)
             {
-                if (_gameCountdown == 0)
+                if (_gameCountdown == 1)
                 {
-                    _gestureMessage.string = @"START!";
+                    _gestureMessage.string = @"1";
                     [self performSelector:@selector(startGame) withObject:nil afterDelay:_beatLength];
-                    //[self startGame];
                 }
                 else if (_gameCountdown == 4)
                 {
-
                     _gestureMessage.string = @"SLAP TO THE BEAT!";
                 }
-                else if (_gameCountdown < 4 && _gameCountdown > 0)
+                else if (_gameCountdown < 4 && _gameCountdown > 1)
                 {
                     _gestureMessage.string = [NSString stringWithFormat:@"%i", _gameCountdown];
                 }
@@ -278,39 +275,37 @@
                 [_medBeatAudioPlayer play];
             }
             
-            [self performSelector:@selector(delayAllowanceOfGesture) withObject:nil afterDelay: .2 * _beatLength];
+            _gestureRecognized  = FALSE;
+            _allowGesture = TRUE;
             _currentGestureSetIndex++;
             _currentNumOfBeats+=_currentGesture.timeStamp;
             _timer.currentTime = 0;
             _gestureTimeStamp = 0;
         }
-        else
+        else if (_gestureRecognized && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
         {
-            if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp * 1.2) * _beatLength)
-            {
-                _gestureTimeStamp = .2*_beatLength;
-                _timer.currentTime = .2*_beatLength;
-                _currentGestureSetIndex++;
-                _currentNumOfBeats +=_currentGesture.timeStamp;
-                _gestureRecognized = FALSE;
-                _allowGesture = TRUE;
-                
-                _gestureMessage.string = @"TOO LATE!";
-                [self setPercentage: -6* _currentGesture.timeStamp];
+            _gestureTimeStamp = 0;
+            _timer.currentTime = 0;
+            _currentNumOfBeats +=_currentGesture.timeStamp;
+            _currentGestureSetIndex++;
+            _gestureRecognized = FALSE;
+            _allowGesture = TRUE;
+            
+        }
+        else if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp * 1.2) * _beatLength)
+        {
+            _gestureTimeStamp = _currentGesture.timeStamp*.2*_beatLength;
+            _timer.currentTime = _currentGesture.timeStamp*.2*_beatLength;
+            _currentGestureSetIndex++;
+            _currentNumOfBeats +=_currentGesture.timeStamp;
+            _gestureRecognized = FALSE;
+            _allowGesture = TRUE;
+            
+            _gestureMessage.string = @"TOO LATE!";
+            [self setPercentage: -6* _currentGesture.timeStamp];
                 
 
-            }
-            else if (_gestureRecognized && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
-            {
-                _gestureTimeStamp = 0;
-                _timer.currentTime = 0;
-                _currentNumOfBeats +=_currentGesture.timeStamp;
-                _currentGestureSetIndex++;
-                _gestureRecognized = FALSE;
-                _allowGesture = TRUE;
-            }
         }
-        
         if (_currentGestureSetIndex >= [_currentGestureSet count])
         {
             [self loadNewGesture];
@@ -330,12 +325,6 @@
     }
 }
 
--(void) delayAllowanceOfGesture
-{
-    _gestureRecognized  = FALSE;
-    _allowGesture = TRUE;
-}
-
 -(void) swipeLeft
 {
     if (!_gestureRecognized && _allowGesture)
@@ -343,7 +332,7 @@
         [_face hitLeft];
         [_leftAudioPlayer prepareToPlay];
         [_leftAudioPlayer play];
-        float convertedTime = _currentGesture.timeStamp * _beatLength;
+        double convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"LeftSlap"])
         {
             [self checkForAccuracy:convertedTime];
@@ -365,7 +354,7 @@
         [_face hitRight];
         [_rightAudioPlayer prepareToPlay];
         [_rightAudioPlayer play];
-        float convertedTime = _currentGesture.timeStamp * _beatLength;
+        double convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"RightSlap"])
         {
             [self checkForAccuracy:convertedTime];
@@ -388,7 +377,7 @@
         [_face hitUp];
         [_upAudioPlayer prepareToPlay];
         [_upAudioPlayer play];
-        float convertedTime = _currentGesture.timeStamp * _beatLength;
+        double convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"UpSlap"])
         {
             [self checkForAccuracy:convertedTime];
@@ -411,7 +400,7 @@
         [_face hitDown];
         [_downAudioPlayer prepareToPlay];
         [_downAudioPlayer play];
-        float convertedTime = _currentGesture.timeStamp * _beatLength;
+        double convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"DownSlap"])
         {
             [self checkForAccuracy:convertedTime];
@@ -427,7 +416,7 @@
     }
 }
 
--(void) checkForAccuracy: (float) convertedTime
+-(void) checkForAccuracy: (double) convertedTime
 {
     if (_gestureTimeStamp < 1.05 * convertedTime && _gestureTimeStamp > .95 * convertedTime)
     {
@@ -529,6 +518,8 @@
     _currentNumOfBeats = 0;
     _soundAndBorderTimeStamp = 0;
     _waveNumOfBeats = 32;
+    
+    [self beat];
     if ([_medBeatAudioPlayer isPlaying])
     {
         [_medBeatAudioPlayer stop];
@@ -603,10 +594,11 @@
 }
 
 -(void) beat {
-    CCActionScaleTo *scaleIn = [CCActionScaleTo actionWithDuration:_beatLength/2 scale:.5];
-    CCActionEaseOut *popIn = [CCActionEaseOut actionWithAction:scaleIn];
-    CCActionScaleTo *scaleOut = [CCActionScaleTo actionWithDuration:_beatLength/2 scale: 1];
-    CCActionEaseIn *popOut = [CCActionEaseIn actionWithAction:scaleOut];
+    CCActionScaleTo *scaleIn = [CCActionScaleTo actionWithDuration:(double)_beatLength/2 scale:.985];
+    CCActionEaseOut *popIn = [CCActionEaseOut actionWithAction:scaleIn rate:10];
+    CCActionScaleTo *scaleOut = [CCActionScaleTo actionWithDuration:(double)_beatLength/2 scale: 1.1];
+    CCActionEaseIn *popOut = [CCActionEaseIn actionWithAction:scaleOut rate:10];
+    [_beatBorder stopAllActions];
     [_beatBorder runAction: [CCActionSequence actions: popIn, popOut, nil]];
 }
 @end
