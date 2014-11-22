@@ -9,11 +9,16 @@
 #import "ComboBar.h"
 
 @implementation ComboBar
+{
+    CCParticleSystem *_comboBarParticle;
+}
 
 -(void) didLoadFromCCB
 {
     self.totalSize = 100;
     self.currentSize = 50;
+    _comboBarParticle = [CCBReader load: @"Particles/ComboBarParticle"];
+    
 }
 
 -(void) update:(CCTime)delta
@@ -28,20 +33,17 @@
     {
         self.comboSize.color = [CCColor cyanColor];
     }
-
 }
 
--(void)loadParticleExplosionWithParticleName: (NSString *) particleName withPosition: (CGPoint) position withColor: (CCColor*) color;
+-(void)loadParticleExplosionWithColor: (CCColor*) color
 {
-    
-    @synchronized(self)
-    {
-        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle", particleName]];
-        explosion.autoRemoveOnFinish = TRUE;
-        explosion.position = position;
-        explosion.startColor = color;
-        explosion.endColor = color;
-        [self.comboSize addChild: explosion];
-    }
+    CCParticleSystem *explosion = _comboBarParticle;
+    [explosion removeFromParent];
+    [explosion resetSystem];
+    explosion.autoRemoveOnFinish = TRUE;
+    explosion.position = ccp(_comboSize.contentSizeInPoints.width, _comboSize.contentSizeInPoints.height/2);
+    explosion.startColor = color;
+    explosion.endColor = color;
+    [self.comboSize addChild: explosion];
 }
 @end

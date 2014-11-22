@@ -192,7 +192,7 @@
         if (_gameCountdownMode)
         {
             if (_soundAndBorderTimeStamp >= _beatLength && _gameCountdown < 4) {
-                [self beat];
+                [_beatBorder beat];
                 if ([_medBeatAudioPlayer isPlaying])
                 {
                     [_medBeatAudioPlayer stop];
@@ -232,7 +232,7 @@
         }
         
         if (_soundAndBorderTimeStamp >= _beatLength) {
-            [self beat];
+            [_beatBorder beat];
             _soundAndBorderTimeStamp = 0;
         }
         
@@ -454,15 +454,15 @@
         [_lowBeatAudioPlayer play];
         if (_comboMode)
         {
-            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(-1, .5) withColor:[CCColor whiteColor]];
+            [_comboBar loadParticleExplosionWithColor:[CCColor whiteColor]];
         }
         else if (_comboBar.currentSize <33)
         {
-            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(-1, .5) withColor:[CCColor redColor]];
+            [_comboBar loadParticleExplosionWithColor:[CCColor redColor]];
         }
         else
         {
-            [_comboBar loadParticleExplosionWithParticleName:@"ComboBar" withPosition:ccp(-1, .5) withColor:[CCColor cyanColor]];
+            [_comboBar loadParticleExplosionWithColor:[CCColor cyanColor]];
         }
     }
     
@@ -519,7 +519,7 @@
     _soundAndBorderTimeStamp = 0;
     _waveNumOfBeats = 32;
     
-    [self beat];
+    [_beatBorder beat];
     if ([_medBeatAudioPlayer isPlaying])
     {
         [_medBeatAudioPlayer stop];
@@ -571,34 +571,16 @@
     _currentGestureSetIndex = 0;
     _currentGestureSet = [_queue objectAtIndex:0];
 }
--(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object
-{
-    @synchronized(self)
-    {
-        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle", particleName]];
-        explosion.autoRemoveOnFinish = TRUE;
-        explosion.position = object.position;
-        [_face addChild: explosion];
-    }
-}
 
 -(void) addScore: (int) score
 {
     _totalScore += score * _pointMultiplier *_currentGesture.timeStamp;
     _totalScoreLabel.string = [NSString stringWithFormat:@"%i", _totalScore];
 }
+
 -(void) resetDefaults
 {
     NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
     [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:appDomain];
-}
-
--(void) beat {
-    CCActionScaleTo *scaleIn = [CCActionScaleTo actionWithDuration:(double)_beatLength/2 scale:.985];
-    CCActionEaseOut *popIn = [CCActionEaseOut actionWithAction:scaleIn rate:10];
-    CCActionScaleTo *scaleOut = [CCActionScaleTo actionWithDuration:(double)_beatLength/2 scale: 1.1];
-    CCActionEaseIn *popOut = [CCActionEaseIn actionWithAction:scaleOut rate:10];
-    [_beatBorder stopAllActions];
-    [_beatBorder runAction: [CCActionSequence actions: popIn, popOut, nil]];
 }
 @end

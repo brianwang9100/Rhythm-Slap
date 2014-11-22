@@ -8,11 +8,29 @@
 
 #import "Face.h"
 
-@implementation Face
+@implementation Face {
+    CCSpriteFrame *_left;
+    CCSpriteFrame *_right;
+    CCSpriteFrame *_up;
+    CCSpriteFrame *_down;
+    CCSpriteFrame *_normal;
+    
+    CCParticleSystem *_leftSpit;
+    CCParticleSystem *_rightSpit;
+    CCParticleSystem *_starsParticle;
+}
 
 -(void) didLoadFromCCB
 {
+    _left = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_left.png"];
+    _right = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_left.png"];
+    _up = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_uppercut.png"];
+    _down = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_headbash.png"];
+    _normal = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_normal.png"];
     
+    _leftSpit = [CCBReader load: @"Particles/SpitParticleLeft"];
+    _rightSpit = [CCBReader load: @"Particles/SpitParticleRight"];
+    _starsParticle = [CCBReader load: @"Particles/StarsParticle"];
 }
 
 -(void) update:(CCTime)delta
@@ -22,54 +40,60 @@
 
 -(void) hitLeft
 {
-    [self loadParticleExplosionWithParticleName:@"Spit" onObject:self withDirection:@"Left"];
-    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_left.png"];
+    [self loadParticleExplosionWithDirection:@"Left"];
+    self.faceSprite.spriteFrame = _left;
     self.faceSprite.flipX = FALSE;
 }
 
 -(void) hitRight
 {
-    [self loadParticleExplosionWithParticleName:@"Spit" onObject:self withDirection:@"Right"];
-    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_left.png"];
+    [self loadParticleExplosionWithDirection:@"Right"];
+    self.faceSprite.spriteFrame = _right;
     self.faceSprite.flipX = TRUE;
 }
 
 -(void) hitUp
 {
-    [self loadParticleExplosionWithParticleName:@"Stars" onObject:self];
-    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_uppercut.png"];
+    [self loadStarsParticleExplosion];
+    self.faceSprite.spriteFrame = _up;
 }
 
 -(void) hitDown
 {
-    [self loadParticleExplosionWithParticleName:@"Stars" onObject:self];
-    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_headbash.png"];
+    [self loadStarsParticleExplosion];
+    self.faceSprite.spriteFrame = _down;
 }
 
 -(void) reset
 {
-    self.faceSprite.spriteFrame = [CCSpriteFrame frameWithImageNamed: @"Sprites/Face/face_normal.png"];
+    self.faceSprite.spriteFrame = _normal;
 }
 
--(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object withDirection: (NSString*) direction
+-(void)loadParticleExplosionWithDirection: (NSString*) direction
 {
-    @synchronized(self)
+    CCParticleSystem *explosion;
+    if ([direction isEqualToString: @"Left"])
     {
-        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle%@", particleName, direction]];
-        explosion.autoRemoveOnFinish = TRUE;
-        explosion.position = object.position;
-        [self addChild: explosion];
+        explosion = _leftSpit;
     }
+    else if ([direction isEqualToString: @"Right"])
+    {
+        explosion = _rightSpit;
+    }
+    [explosion removeFromParent];
+    [explosion resetSystem];
+    explosion.autoRemoveOnFinish = TRUE;
+    explosion.position = self.position;
+    [self addChild: explosion];
 }
 
--(void)loadParticleExplosionWithParticleName: (NSString *) particleName onObject: (CCNode*) object
+-(void)loadStarsParticleExplosion
 {
-    @synchronized(self)
-    {
-        CCParticleSystem *explosion = (CCParticleSystem*)[CCBReader load: [NSString stringWithFormat:@"Particles/%@Particle", particleName]];
-        explosion.autoRemoveOnFinish = TRUE;
-        explosion.position = object.position;
-        [self addChild: explosion];
-    }
+    CCParticleSystem *explosion = _starsParticle;
+    [explosion removeFromParent];
+    [explosion resetSystem];
+    explosion.autoRemoveOnFinish = TRUE;
+    explosion.position = self.position;
+    [self addChild: explosion];
 }
 @end
