@@ -19,7 +19,8 @@
     ComboBar *_comboBar;
     CCNodeGradient *_colorGradientNode;
     CCNodeColor *_glowNode;
-    CCLabelTTF *_gestureMessage;
+    CCLabelTTF *_gestureMessageTop;
+    CCLabelTTF *_gestureMessageBot;
     CCLabelTTF *_comboModeLabel;
     NSUserDefaults *_defaults;
 
@@ -69,6 +70,8 @@
     
     double _soundTicker;
     
+    CCParticleSystem *_perfectParticle;
+    
     BeatBorder *_beatBorder;
 }
 
@@ -93,7 +96,8 @@
     self.listOfAudioPlayers = [NSMutableArray arrayWithObjects: self.lowBeatAudioPlayer, self.medBeatAudioPlayer, self.highBeatAudioPlayer, self.leftAudioPlayer, self.rightAudioPlayer, self.upAudioPlayer, self.downAudioPlayer, nil];
     
     self.userInteractionEnabled = FALSE;
-    _gestureMessage.string = @"";
+    _gestureMessageTop.string = @"";
+    _gestureMessageBot.string = @"";
     _defaults = [NSUserDefaults standardUserDefaults];
    
     _timer = [Timer alloc];
@@ -177,6 +181,8 @@
     _swipeDown = [[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeDown)];
     _swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
     [[[CCDirector sharedDirector] view] addGestureRecognizer:_swipeDown];
+    
+    _perfectParticle = (CCParticleSystem*)[CCBReader load:@"Particles/PerfectParticle"];
 }
 
 -(void) update:(CCTime)delta
@@ -206,16 +212,16 @@
             {
                 if (_gameCountdown == 1)
                 {
-                    _gestureMessage.string = @"1";
+                    _gestureMessageTop.string = @"1";
                     [self performSelector:@selector(startGame) withObject:nil afterDelay:_beatLength];
                 }
                 else if (_gameCountdown == 4)
                 {
-                    _gestureMessage.string = @"SLAP TO THE BEAT!";
+                    _gestureMessageTop.string = @"SLAP TO THE BEAT!";
                 }
                 else if (_gameCountdown < 4 && _gameCountdown > 1)
                 {
-                    _gestureMessage.string = [NSString stringWithFormat:@"%i", _gameCountdown];
+                    _gestureMessageTop.string = [NSString stringWithFormat:@"%i", _gameCountdown];
                 }
                 _timer.currentTime = 0;
                 _gameCountdown--;
@@ -264,8 +270,10 @@
         {
             if (![_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"])
             {
-                _gestureMessage.string = _currentGesture.typeOfSlapNeeded;
+                _gestureMessageTop.string = _currentGesture.typeOfSlapNeeded;
+                _gestureMessageBot.string = @"";
                 [_face reset];
+                
                 //SECOND DOUBLE SLAP ISN'T PLAYING
                 if ([_medBeatAudioPlayer isPlaying])
                 {
@@ -301,7 +309,8 @@
             _gestureRecognized = FALSE;
             _allowGesture = TRUE;
             
-            _gestureMessage.string = @"TOO LATE!";
+            _gestureMessageBot.string = @"TOO LATE!";
+            _gestureMessageBot.color = [CCColor redColor];
             [self setPercentage: -6* _currentGesture.timeStamp];
                 
 
@@ -317,11 +326,14 @@
 {
     if (_tutorialMode)
     {
-        _gestureMessage.string = @"TUTORIAL COMPLETE";
+        _gestureMessageTop.string = @"TUTORIAL COMPLETE";
+        _gestureMessageBot.string = @"";
+        
     }
     else
     {
-        _gestureMessage.string = @"WAVE COMPLETE";
+        _gestureMessageTop.string = @"WAVE COMPLETE";
+        _gestureMessageBot.string = @"";
     }
 }
 
@@ -339,7 +351,8 @@
         }
         else
         {
-            _gestureMessage.string = @"WRONG SLAP";
+            _gestureMessageBot.string = @"WRONG SLAP";
+            _gestureMessageBot.color = [CCColor redColor];
             [self setPercentage: -6 * _currentGesture.timeStamp];
             [self addScore: -25];
         }
@@ -362,7 +375,8 @@
         }
         else
         {
-            _gestureMessage.string = @"WRONG SLAP";
+            _gestureMessageBot.string = @"WRONG SLAP";
+            _gestureMessageBot.color = [CCColor redColor];
             [self setPercentage: -6 * _currentGesture.timeStamp];
             [self addScore: -25];
         }
@@ -384,7 +398,8 @@
         }
         else
         {
-            _gestureMessage.string = @"WRONG SLAP";
+            _gestureMessageBot.string = @"WRONG SLAP";
+            _gestureMessageBot.color = [CCColor redColor];
             [self setPercentage: -6 * _currentGesture.timeStamp];
             [self addScore: -25];
         }
@@ -407,7 +422,8 @@
         }
         else
         {
-            _gestureMessage.string = @"WRONG SLAP";
+            _gestureMessageBot.string = @"WRONG SLAP";
+            _gestureMessageBot.color = [CCColor redColor];
             [self setPercentage: -6 * _currentGesture.timeStamp];
             [self addScore: -25];
         }
@@ -420,25 +436,32 @@
 {
     if (_gestureTimeStamp < 1.05 * convertedTime && _gestureTimeStamp > .95 * convertedTime)
     {
-        _gestureMessage.string = @"PERFECT!";
+        _gestureMessageBot.string = @"PERFECT!";
+        _gestureMessageBot.color = [CCColor yellowColor];
+        
+        [self loadParticleExplosionWithPosition: ccp(_gestureMessageBot.positionInPoints.x, _gestureMessageBot.positionInPoints.y) andParticle:_perfectParticle];
+        
         [self setPercentage: 6 * _currentGesture.timeStamp];
         [self addScore: 50];
     }
     else if (_gestureTimeStamp < 1.10 * convertedTime && _gestureTimeStamp > .9 * convertedTime)
     {
-        _gestureMessage.string = @"GOOD";
+        _gestureMessageBot.string = @"GOOD";
+        _gestureMessageBot.color = [CCColor cyanColor];
         [self setPercentage: 4 * _currentGesture.timeStamp];
         [self addScore: 25];
     }
     else if (_gestureTimeStamp < 1.20 * convertedTime && _gestureTimeStamp > .8 * convertedTime)
     {
-        _gestureMessage.string = @"OK";
+        _gestureMessageBot.string = @"OK";
+        _gestureMessageBot.color = [CCColor whiteColor];
         [self setPercentage: 2 * _currentGesture.timeStamp];
         [self addScore: 10];
     }
     else if (_gestureTimeStamp <= .8 * convertedTime)
     {
-        _gestureMessage.string = @"TOO EARLY!";
+        _gestureMessageBot.string = @"TOO EARLY!";
+        _gestureMessageBot.color = [CCColor redColor];
         [self setPercentage: -6 * _currentGesture.timeStamp];
         [self addScore: -25];
     }
@@ -494,7 +517,7 @@
         _gameStarted = FALSE;
         
         //put in information about
-        _gestureMessage.string = @"";
+        _gestureMessageTop.string = @"";
         _totalScoreLabel.string = @"";
     
         id move = [CCActionMoveTo actionWithDuration:2 position:ccp(.5, -50)];
@@ -570,6 +593,15 @@
     [_queue addObject: generatedGesture];
     _currentGestureSetIndex = 0;
     _currentGestureSet = [_queue objectAtIndex:0];
+}
+
+-(void)loadParticleExplosionWithPosition: (CGPoint) position andParticle: (CCParticleSystem*) particle {
+    CCParticleSystem *explosion = particle;
+    [explosion removeFromParent];
+    [explosion resetSystem];
+    explosion.autoRemoveOnFinish = TRUE;
+    explosion.position = position;
+    [self addChild: explosion];
 }
 
 -(void) addScore: (int) score

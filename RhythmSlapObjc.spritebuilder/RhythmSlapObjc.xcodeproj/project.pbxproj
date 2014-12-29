@@ -25,7 +25,6 @@
 		B7378977180762440076A88C /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B737896D180762440076A88C /* Default.png */; };
 		B7378978180762440076A88C /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B737896E180762440076A88C /* Default@2x.png */; };
 		B73789871807631A0076A88C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B73789851807631A0076A88C /* main.m */; };
-		B737898A1807642B0076A88C /* libcocos2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B737894B180761A90076A88C /* libcocos2d.a */; };
 		B7378994180767190076A88C /* MainScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B7378993180767190076A88C /* MainScene.m */; };
 		B77F1B3217B978D7009739AE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B77F1B3117B978D7009739AE /* QuartzCore.framework */; };
 		B77F1B3417B978D7009739AE /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B77F1B3317B978D7009739AE /* OpenGLES.framework */; };
@@ -43,6 +42,7 @@
 		DF68497719CEDA3E000413E2 /* left_bfxr.wav in Resources */ = {isa = PBXBuildFile; fileRef = DF68497019CEDA3E000413E2 /* left_bfxr.wav */; };
 		DF68497819CEDA3E000413E2 /* right_bfxr.wav in Resources */ = {isa = PBXBuildFile; fileRef = DF68497119CEDA3E000413E2 /* right_bfxr.wav */; };
 		DF68497919CEDA3E000413E2 /* uppercut_bfxr.wav in Resources */ = {isa = PBXBuildFile; fileRef = DF68497219CEDA3E000413E2 /* uppercut_bfxr.wav */; };
+		DF76B1A31A2EA83000399F51 /* libcocos2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B737894B180761A90076A88C /* libcocos2d.a */; };
 		DFB4B48119D494C500EA2337 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = DFB4B48019D494C500EA2337 /* README.md */; };
 		DFF41F3B19CD999B000D90C8 /* StartScene.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F3A19CD999B000D90C8 /* StartScene.m */; };
 		DFF41F3E19CD99AB000D90C8 /* ComboBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F3D19CD99AB000D90C8 /* ComboBar.m */; };
@@ -142,8 +142,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF76B1A31A2EA83000399F51 /* libcocos2d.a in Frameworks */,
 				8392007A18EE8E3300B6C429 /* GLKit.framework in Frameworks */,
-				B737898A1807642B0076A88C /* libcocos2d.a in Frameworks */,
 				B77F1B3217B978D7009739AE /* QuartzCore.framework in Frameworks */,
 				B77F1B3417B978D7009739AE /* OpenGLES.framework in Frameworks */,
 				B77F1B3617B978D7009739AE /* OpenAL.framework in Frameworks */,
