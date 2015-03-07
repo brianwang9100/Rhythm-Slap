@@ -44,6 +44,7 @@
 		DF68497919CEDA3E000413E2 /* uppercut_bfxr.wav in Resources */ = {isa = PBXBuildFile; fileRef = DF68497219CEDA3E000413E2 /* uppercut_bfxr.wav */; };
 		DF76B1A31A2EA83000399F51 /* libcocos2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B737894B180761A90076A88C /* libcocos2d.a */; };
 		DFB4B48119D494C500EA2337 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = DFB4B48019D494C500EA2337 /* README.md */; };
+		DFCB21BE1AAAAE09003D620E /* SoundDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DFCB21BD1AAAAE09003D620E /* SoundDelegate.m */; };
 		DFF41F3B19CD999B000D90C8 /* StartScene.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F3A19CD999B000D90C8 /* StartScene.m */; };
 		DFF41F3E19CD99AB000D90C8 /* ComboBar.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F3D19CD99AB000D90C8 /* ComboBar.m */; };
 		DFF41F4119CD99B3000D90C8 /* Face.m in Sources */ = {isa = PBXBuildFile; fileRef = DFF41F4019CD99B3000D90C8 /* Face.m */; };
@@ -70,6 +71,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 5018F24C0DFDEAC400C013A5;
 			remoteInfo = cocos2d;
+		};
+		DFCB21C31AAAAE0A003D620E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B7378940180761A80076A88C /* cocos2d-ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = D2FEB74F194F6C9E00FC0574;
+			remoteInfo = cocos2dAndroid;
+		};
+		DFCB21C51AAAAE0A003D620E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B7378940180761A80076A88C /* cocos2d-ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 5BF3267A195F8D8800D9A51A;
+			remoteInfo = cocos2dJava;
+		};
+		DFCB21C71AAAAE0A003D620E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B7378940180761A80076A88C /* cocos2d-ios.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7A4037A819E37038007B6E8F;
+			remoteInfo = "cocos2d-mac";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -116,6 +138,8 @@
 		DF68497119CEDA3E000413E2 /* right_bfxr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = right_bfxr.wav; sourceTree = "<group>"; };
 		DF68497219CEDA3E000413E2 /* uppercut_bfxr.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = uppercut_bfxr.wav; sourceTree = "<group>"; };
 		DFB4B48019D494C500EA2337 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		DFCB21BC1AAAAE09003D620E /* SoundDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundDelegate.h; path = Source/SoundDelegate.h; sourceTree = "<group>"; };
+		DFCB21BD1AAAAE09003D620E /* SoundDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SoundDelegate.m; path = Source/SoundDelegate.m; sourceTree = "<group>"; };
 		DFF41F3919CD999B000D90C8 /* StartScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartScene.h; sourceTree = "<group>"; };
 		DFF41F3A19CD999B000D90C8 /* StartScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartScene.m; sourceTree = "<group>"; };
 		DFF41F3C19CD99AB000D90C8 /* ComboBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ComboBar.h; sourceTree = "<group>"; };
@@ -174,6 +198,8 @@
 				B737893E1807617C0076A88C /* AppDelegate.m */,
 				B7378992180767190076A88C /* MainScene.h */,
 				B7378993180767190076A88C /* MainScene.m */,
+				DFCB21BC1AAAAE09003D620E /* SoundDelegate.h */,
+				DFCB21BD1AAAAE09003D620E /* SoundDelegate.m */,
 				DFF41F3919CD999B000D90C8 /* StartScene.h */,
 				DFF41F3A19CD999B000D90C8 /* StartScene.m */,
 				DFFBE94F1A1D4B70006CB116 /* BeatBorder.h */,
@@ -197,6 +223,9 @@
 			isa = PBXGroup;
 			children = (
 				B737894B180761A90076A88C /* libcocos2d.a */,
+				DFCB21C41AAAAE0A003D620E /* libcocos2dAndroid.a */,
+				DFCB21C61AAAAE0A003D620E /* cocos2dJava.jar */,
+				DFCB21C81AAAAE0A003D620E /* libcocos2d-mac.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -371,6 +400,27 @@
 			remoteRef = B737894A180761A90076A88C /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		DFCB21C41AAAAE0A003D620E /* libcocos2dAndroid.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libcocos2dAndroid.a;
+			remoteRef = DFCB21C31AAAAE0A003D620E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DFCB21C61AAAAE0A003D620E /* cocos2dJava.jar */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.jar;
+			path = cocos2dJava.jar;
+			remoteRef = DFCB21C51AAAAE0A003D620E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		DFCB21C81AAAAE0A003D620E /* libcocos2d-mac.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libcocos2d-mac.a";
+			remoteRef = DFCB21C71AAAAE0A003D620E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -434,6 +484,7 @@
 				B7378994180767190076A88C /* MainScene.m in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
 				DFF41F3E19CD99AB000D90C8 /* ComboBar.m in Sources */,
+				DFCB21BE1AAAAE09003D620E /* SoundDelegate.m in Sources */,
 				DFF41F4A19CD99CE000D90C8 /* GameEndPopUp.m in Sources */,
 				DFF41F4E19CD9B36000D90C8 /* SlapGestures.m in Sources */,
 				DFF41F4719CD99C6000D90C8 /* Hand.m in Sources */,
