@@ -178,8 +178,7 @@
     _colorGradientNode.zOrder = -3;
     _glowNode.zOrder = -2;
     
-    [self schedule:@selector(beatAction) interval:_beatLength];
-    [_beatBorder schedule:@selector(beat) interval:_beatLength];
+    [self schedule:@selector(beatAction) interval:_beatLength repeat: CCTimerRepeatForever delay:_beatLength];
 }
 
 -(void) beatAction
@@ -190,7 +189,7 @@
         if (_gameCountdownMode)
         {
             [_soundDelegate playMed];
-            if (_secondBeat)
+            if (_firstBeat)
             {
                 if (_gameCountdown == 1)
                 {
@@ -233,6 +232,7 @@
             _gestureTimeStamp = 0;
         }
     }
+    _firstBeat = !_firstBeat;
     _secondBeat = !_secondBeat;
 }
 
@@ -648,7 +648,7 @@
     _gestureTimeStamp = 0;
     _currentNumOfBeats = 0;
     _waveNumOfBeats = 32;
-    [self performSelector:@selector(checkNextGesture) withObject:nil afterDelay:2 * _beatLength];
+    [self performSelector:@selector(checkNextGesture) withObject:nil afterDelay: _beatLength];
 }
 
 -(void) endGame
