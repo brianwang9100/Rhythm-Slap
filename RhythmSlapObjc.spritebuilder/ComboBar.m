@@ -11,6 +11,8 @@
 @implementation ComboBar
 {
     CCParticleSystem *_comboBarParticle;
+    CCParticleSystem *_comboBarParticle2;
+
 }
 
 -(void) didLoadFromCCB
@@ -18,6 +20,7 @@
     self.totalSize = 100;
     self.currentSize = 50;
     _comboBarParticle = [CCBReader load: @"Particles/ComboBarParticle"];
+    _comboBarParticle2 = [CCBReader load: @"Particles/ComboBarParticle"];
     
 }
 
@@ -45,5 +48,14 @@
     explosion.startColor = color;
     explosion.endColor = color;
     [self.comboSize addChild: explosion];
+    
+    CCParticleSystem *explosion2 = _comboBarParticle2;
+    [explosion2 removeFromParent];
+    [explosion2 resetSystem];
+    explosion2.autoRemoveOnFinish = TRUE;
+    explosion2.position = ccp(0, _comboSize.contentSizeInPoints.height/2);
+    explosion2.startColor = color;
+    explosion2.endColor = color;
+    [self.comboSize addChild: explosion2];
 }
 @end
