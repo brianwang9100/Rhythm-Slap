@@ -64,6 +64,7 @@
     
     double _gestureTimeStamp;
     double _soundAndBorderTimeStamp;
+    double _methodDifference;
     BOOL _gestureRecognized;
     BOOL _allowGesture;
     double _beatLength;
@@ -71,6 +72,9 @@
     
     BOOL _firstBeat;
     BOOL _secondBeat;
+    
+    NSDate *_methodStart;
+    NSDate *_methodFinish;
     
     double _soundTicker;
     
@@ -102,6 +106,7 @@
 
     _gestureTimeStamp = 0;
     _soundAndBorderTimeStamp = 0;
+    
     _gestureRecognized = FALSE;
     _beatLength = .7;
     _beatBorder.beatLength = _beatLength;
@@ -181,6 +186,143 @@
     [self schedule:@selector(beatAction) interval:_beatLength repeat: CCTimerRepeatForever delay:_beatLength];
 }
 
+//-(void) update:(CCTime)delta
+//{
+//    _timer.currentTime += delta;
+//    _gestureTimeStamp += delta;
+//    _timer.comboTimeKeeper += delta;
+//    _soundTicker += delta;
+//    _soundAndBorderTimeStamp += delta;
+//    
+//    if (!_gameStarted)
+//    {
+//        if (_gameCountdownMode)
+//        {
+//            if (_soundAndBorderTimeStamp >= _beatLength && _gameCountdown < 4) {
+//                [_beatBorder beat];
+//                if ([_medBeatAudioPlayer isPlaying])
+//                {
+//                    [_medBeatAudioPlayer stop];
+//                }
+//                [_medBeatAudioPlayer prepareToPlay];
+//                [_medBeatAudioPlayer play];
+//                _soundAndBorderTimeStamp = 0;
+//                
+//            }
+//            if (_timer.currentTime >= 2*_beatLength)
+//            {
+//                if (_gameCountdown == 1)
+//                {
+//                    _gestureMessageTop.string = @"1";
+//                    [self performSelector:@selector(startGame) withObject:nil afterDelay:_beatLength];
+//                }
+//                else if (_gameCountdown == 4)
+//                {
+//                    _gestureMessageTop.string = @"SLAP TO THE BEAT!";
+//                }
+//                else if (_gameCountdown < 4 && _gameCountdown > 1)
+//                {
+//                    _gestureMessageTop.string = [NSString stringWithFormat:@"%i", _gameCountdown];
+//                }
+//                _timer.currentTime = 0;
+//                _gameCountdown--;
+//            }
+//        }
+//    }
+//    else if (!_gameEnded)
+//    {
+//        if (_comboMode && _timer.comboTimeKeeper >= _beatLength)
+//        {
+//            _pointMultiplier++;
+//            _timer.comboTimeKeeper = 0;
+//            _comboModeLabel.string = [NSString stringWithFormat:@"COMBO MODE x%i", _pointMultiplier];
+//        }
+//        
+//        if (_soundAndBorderTimeStamp >= _beatLength) {
+//            [_beatBorder beat];
+//            _soundAndBorderTimeStamp = 0;
+//        }
+//        
+//        if (_currentNumOfBeats >= _waveNumOfBeats)
+//        {
+//            
+//            [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
+//            _beatLength -= .05;
+//            _beatBorder.beatLength = _beatLength;
+//            
+//            _gestureRecognized = TRUE;
+//            _allowGesture = FALSE;
+//            
+//            _gameStarted = FALSE;
+//            _gameCountdownMode = TRUE;
+//            _gameCountdown = 4;
+//            _timer.currentTime = 0;
+//            _gestureTimeStamp = 0;
+//        }
+//        
+//        _currentGesture = _currentGestureSet[_currentGestureSetIndex];
+//        
+//        if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"]
+//             || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"]
+//             || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"]
+//             || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE      "]
+//             || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]
+//             || [_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"]) && (_timer.currentTime >= _currentGesture.timeStamp * _beatLength))
+//        {
+//            if (![_currentGesture.typeOfSlapNeeded isEqual:@"PAUSE"])
+//            {
+//                _gestureMessageTop.string = _currentGesture.typeOfSlapNeeded;
+//                _gestureMessageBot.string = @"";
+//                [_face reset];
+//                
+//                //SECOND DOUBLE SLAP ISN'T PLAYING
+//                if ([_medBeatAudioPlayer isPlaying])
+//                {
+//                    [_medBeatAudioPlayer stop];
+//                }
+//                [_medBeatAudioPlayer prepareToPlay];
+//                [_medBeatAudioPlayer play];
+//            }
+//            
+//            _gestureRecognized  = FALSE;
+//            _allowGesture = TRUE;
+//            _currentGestureSetIndex++;
+//            _currentNumOfBeats+=_currentGesture.timeStamp;
+//            _timer.currentTime = 0;
+//            _gestureTimeStamp = 0;
+//        }
+//        else if (_gestureRecognized && _timer.currentTime >= _currentGesture.timeStamp * _beatLength)
+//        {
+//            _gestureTimeStamp = 0;
+//            _timer.currentTime = 0;
+//            _currentNumOfBeats +=_currentGesture.timeStamp;
+//            _currentGestureSetIndex++;
+//            _gestureRecognized = FALSE;
+//            _allowGesture = TRUE;
+//            
+//        }
+//        else if (!_gestureRecognized && _timer.currentTime >= (_currentGesture.timeStamp * 1.2) * _beatLength)
+//        {
+//            _gestureTimeStamp = _currentGesture.timeStamp*.2*_beatLength;
+//            _timer.currentTime = _currentGesture.timeStamp*.2*_beatLength;
+//            _currentGestureSetIndex++;
+//            _currentNumOfBeats +=_currentGesture.timeStamp;
+//            _gestureRecognized = FALSE;
+//            _allowGesture = TRUE;
+//            
+//            _gestureMessageBot.string = @"TOO LATE!";
+//            _gestureMessageBot.color = [CCColor redColor];
+//            [self setPercentage: -6* _currentGesture.timeStamp];
+//            
+//            
+//        }
+//        if (_currentGestureSetIndex >= [_currentGestureSet count])
+//        {
+//            [self loadNewGesture];
+//        }
+//    }
+//}
+
 -(void) beatAction
 {
     if (!_gameStarted)
@@ -230,6 +372,7 @@
             _gameCountdown = 4;
             _gestureTimeStamp = 0;
             [self unscheduleAllSelectors];
+            [_beatBorder unscheduleAllSelectors];
             [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
             [self schedule:@selector(beatAction) interval:_beatLength repeat: CCTimerRepeatForever delay:3 * _beatLength];
             
@@ -241,8 +384,10 @@
 
 -(void) checkNextGesture
 {
+    _methodStart = [NSDate date];
     if (!_gameEnded && _gameStarted)
     {
+    _methodDifference = 0;
         _currentGesture = _currentGestureSet[_currentGestureSetIndex];
         if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"]
              || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"]
@@ -270,12 +415,16 @@
             _gestureRecognized  = FALSE;
             _allowGesture = TRUE;
             _gestureTimeStamp = 0;
+            _methodFinish = [NSDate date];
+            NSTimeInterval executionTime = [_methodFinish timeIntervalSinceDate: _methodStart];
+            [self performSelector:@selector(checkNextGesture) withObject:nil afterDelay:_currentGesture.timeStamp * _beatLength - executionTime];
         }
         else
         {
-            [self performSelector:@selector(checkGesture) withObject:nil afterDelay: _currentGesture.timeStamp * .2 * _beatLength];
+            _methodFinish = [NSDate date];
+            NSTimeInterval executionTime = [_methodFinish timeIntervalSinceDate: _methodStart];
+            [self performSelector:@selector(checkGesture) withObject:nil afterDelay: _currentGesture.timeStamp * .2 * _beatLength - executionTime];
         }
-        [self performSelector:@selector(checkNextGesture) withObject:nil afterDelay:_currentGesture.timeStamp * _beatLength];
     }
     
 }
@@ -301,7 +450,9 @@
     
     _gestureRecognized = FALSE;
     _allowGesture = TRUE;
-    
+    _methodFinish = [NSDate date];
+    NSTimeInterval executionTime = [_methodFinish timeIntervalSinceDate: _methodStart];
+    [self performSelector:@selector(checkNextGesture) withObject:nil afterDelay:_currentGesture.timeStamp * _beatLength - executionTime];
 }
 
 -(void) update:(CCTime) delta
