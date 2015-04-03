@@ -19,6 +19,7 @@
     ComboBar *_comboBar;
     CCNodeGradient *_colorGradientNode;
     CCNodeColor *_glowNode;
+    CCNodeColor *_whiteNode;
     CCLabelTTF *_gestureMessageTop;
     CCLabelTTF *_gestureMessageBot;
     CCLabelTTF *_comboModeLabel;
@@ -72,28 +73,12 @@
     
     CCParticleSystem *_perfectParticle;
     
+    SoundDelegate *_soundDelegate;
     BeatBorder *_beatBorder;
 }
 
 -(void) didLoadFromCCB
 {
-    _lowBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_bfxr" ofType:@"wav"]];
-    _medBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_high" ofType:@"wav"]];
-    _highBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"beat_higher" ofType:@"wav"]];
-    _leftBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"left_bfxr" ofType:@"wav"]];
-    _rightBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"right_bfxr" ofType:@"wav"]];
-    _upBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"uppercut_bfxr" ofType:@"wav"]];
-    _downBeat = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"headbash_bfxr" ofType:@"wav"]];
-    
-    _lowBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_lowBeat error:nil];
-    _medBeatAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_medBeat error:nil];
-    _highBeatAudioPlayer= [[AVAudioPlayer alloc] initWithContentsOfURL:_highBeat error:nil];
-    _leftAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_leftBeat error:nil];
-    _rightAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_rightBeat error:nil];
-    _upAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_upBeat error:nil];
-    _downAudioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:_downBeat error:nil];
-    
-    self.listOfAudioPlayers = [NSMutableArray arrayWithObjects: self.lowBeatAudioPlayer, self.medBeatAudioPlayer, self.highBeatAudioPlayer, self.leftAudioPlayer, self.rightAudioPlayer, self.upAudioPlayer, self.downAudioPlayer, nil];
     
     self.userInteractionEnabled = FALSE;
     _gestureMessageTop.string = @"";
@@ -183,6 +168,13 @@
     [[[CCDirector sharedDirector] view] addGestureRecognizer:_swipeDown];
     
     _perfectParticle = (CCParticleSystem*)[CCBReader load:@"Particles/PerfectParticle"];
+    
+    _whiteNode.zOrder = -4;
+    _colorGradientNode.zOrder = -3;
+    _glowNode.zOrder = -2;
+    
+    _soundDelegate = [[SoundDelegate alloc] init];
+    
 }
 
 -(void) update:(CCTime)delta
@@ -199,12 +191,7 @@
         {
             if (_soundAndBorderTimeStamp >= _beatLength && _gameCountdown < 4) {
                 [_beatBorder beat];
-                if ([_medBeatAudioPlayer isPlaying])
-                {
-                    [_medBeatAudioPlayer stop];
-                }
-                [_medBeatAudioPlayer prepareToPlay];
-                [_medBeatAudioPlayer play];
+                [_soundDelegate playMed];
                 _soundAndBorderTimeStamp = 0;
                 
             }
@@ -275,12 +262,7 @@
                 [_face reset];
                 
                 //SECOND DOUBLE SLAP ISN'T PLAYING
-                if ([_medBeatAudioPlayer isPlaying])
-                {
-                    [_medBeatAudioPlayer stop];
-                }
-                [_medBeatAudioPlayer prepareToPlay];
-                [_medBeatAudioPlayer play];
+                [_soundDelegate playMed];
             }
             
             _gestureRecognized  = FALSE;
@@ -342,8 +324,7 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitLeft];
-        [_leftAudioPlayer prepareToPlay];
-        [_leftAudioPlayer play];
+        [_soundDelegate playLeft];
         double convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"LeftSlap"])
         {
@@ -365,8 +346,7 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitRight];
-        [_rightAudioPlayer prepareToPlay];
-        [_rightAudioPlayer play];
+        [_soundDelegate playRight];
         double convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual: @"SingleSlap"] || [_currentGesture.typeOfSlapNeeded isEqual:@"RightSlap"])
         {
@@ -389,8 +369,7 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitUp];
-        [_upAudioPlayer prepareToPlay];
-        [_upAudioPlayer play];
+        [_soundDelegate playUp];
         double convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"UpSlap"])
         {
@@ -413,8 +392,7 @@
     if (!_gestureRecognized && _allowGesture)
     {
         [_face hitDown];
-        [_downAudioPlayer prepareToPlay];
-        [_downAudioPlayer play];
+        [_soundDelegate playDown];
         double convertedTime = _currentGesture.timeStamp * _beatLength;
         if ([_currentGesture.typeOfSlapNeeded isEqual:@"DownSlap"])
         {
@@ -473,8 +451,7 @@
     _comboBar.currentSize += percent;
     if (percent < 0)
     {
-        [_lowBeatAudioPlayer prepareToPlay];
-        [_lowBeatAudioPlayer play];
+        [_soundDelegate playLow];
         if (_comboMode)
         {
             [_comboBar loadParticleExplosionWithColor:[CCColor whiteColor]];
@@ -543,12 +520,7 @@
     _waveNumOfBeats = 32;
     
     [_beatBorder beat];
-    if ([_medBeatAudioPlayer isPlaying])
-    {
-        [_medBeatAudioPlayer stop];
-    }
-    [_medBeatAudioPlayer prepareToPlay];
-    [_medBeatAudioPlayer play];
+    [_soundDelegate playMed];
     
 //    [_medBeatAudioPlayer performSelector:@selector(prepareToPlay) withObject:nil afterDelay:_beatLength];
 //    [_medBeatAudioPlayer performSelector:@selector(play) withObject:nil afterDelay:_beatLength];
