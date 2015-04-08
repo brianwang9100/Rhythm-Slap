@@ -179,6 +179,7 @@
 
 -(void) update:(CCTime)delta
 {
+    NSDate *current = [NSDate date];
     _timer.currentTime += delta;
     _gestureTimeStamp += delta;
     _timer.comboTimeKeeper += delta;
@@ -217,13 +218,28 @@
     }
     else if (!_gameEnded)
     {
-        if (_comboMode && _timer.comboTimeKeeper >= _beatLength)
+        _currentGesture = _currentGestureSet[_currentGestureSetIndex];
+
+        if (_comboMode && _timer.comboTimeKeeper >= 2*_beatLength)
         {
             _pointMultiplier++;
             _timer.comboTimeKeeper = 0;
             _comboModeLabel.string = [NSString stringWithFormat:@"COMBO MODE x%i", _pointMultiplier];
         }
         
+//        if (_timer.currentTime >= _beatLength) {
+//            if ([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"]
+//                || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE      "]
+//                || [_currentGesture.typeOfSlapNeeded isEqual:@"TRIPLE SLAP!"]
+//                || [_currentGesture.typeOfSlapNeeded isEqual:@"HEAD BASH!"]
+//                || _allowGesture
+//                || _gestureRecognized)
+//            {
+//                [_beatBorder beat];
+//            }
+//            _soundAndBorderTimeStamp = 0;
+//
+//        }
         if (_soundAndBorderTimeStamp >= _beatLength) {
             [_beatBorder beat];
             _soundAndBorderTimeStamp = 0;
@@ -231,22 +247,21 @@
         
         if (_currentNumOfBeats >= _waveNumOfBeats)
         {
-            
             [self performSelector:@selector(delayWaveMessage) withObject:nil afterDelay:2 * _beatLength];
             _beatLength -= .05;
             _beatBorder.beatLength = _beatLength;
             
             _gestureRecognized = TRUE;
             _allowGesture = FALSE;
-            
             _gameStarted = FALSE;
-            _gameCountdownMode = TRUE;
+            
             _gameCountdown = 4;
             _timer.currentTime = 0;
             _gestureTimeStamp = 0;
+            _timer.comboTimeKeeper = 0;
+            _soundTicker = 0;
+            _soundAndBorderTimeStamp = 0;
         }
-        
-        _currentGesture = _currentGestureSet[_currentGestureSetIndex];
         
         if (([_currentGesture.typeOfSlapNeeded isEqual:@"SLAP!"]
              || [_currentGesture.typeOfSlapNeeded isEqual:@"DOUBLE SLAP!"]
@@ -264,6 +279,7 @@
                 //SECOND DOUBLE SLAP ISN'T PLAYING
                 [_soundDelegate playMed];
             }
+                
             
             _gestureRecognized  = FALSE;
             _allowGesture = TRUE;
@@ -302,6 +318,13 @@
             [self loadNewGesture];
         }
     }
+    NSDate *stop = [NSDate date];
+    NSTimeInterval difference = [stop timeIntervalSinceDate:current];
+    _timer.currentTime -= difference;
+    _gestureTimeStamp -= difference;
+    _timer.comboTimeKeeper -= difference;
+    _soundTicker -= difference;
+    _soundAndBorderTimeStamp -= difference;
 }
 
 -(void) delayWaveMessage
@@ -316,7 +339,12 @@
     {
         _gestureMessageTop.string = @"WAVE COMPLETE";
         _gestureMessageBot.string = @"";
+        [self performSelector:@selector(restartTimer) withObject:nil afterDelay: 2*_beatLength];
     }
+}
+
+-(void) restartTimer {
+    _gameCountdownMode = TRUE;
 }
 
 -(void) swipeLeft
