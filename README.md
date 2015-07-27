@@ -20,4 +20,4 @@ Using swipe gestures, slap someone to the beat and score combo points. 8-bit fun
  - Add music
 
 ##Bugs
- - Border not syncing with the gameplay
+ - Border not syncing with the gameplay (THIS ONE NEEDS SO MUCH WORK)
